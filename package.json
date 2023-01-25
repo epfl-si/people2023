@@ -6,7 +6,7 @@
     "@epfl-si/react-graphql-paginated": "^0.1.0",
     "@epfl-si/react-graphql-simple": "^0.2.2",
     "@tanstack/react-table": "^8.5.15",
-    "epfl-elements": "epfl-si/elements",
+    "epfl-elements": "^4.0.0",
     "esbuild": "^0.15.12",
     "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",
@@ -16,9 +16,7 @@
     "use-async-effect": "^2.2.7"
   },
   "scripts": {
-    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=assets",
-    "postinstall": "yarn build-epfl-elements",
-    "build-epfl-elements": "set -e -x; dir=node_modules/epfl-elements; test -d \"$dir/dist\" && exit 0; if test -d \"$dir\"; then (cd \"$dir\"; yarn; yarn dist); exit 0; fi"
+    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=assets"
   },
   "devDependencies": {
     "@types/react": "^18.0.20",

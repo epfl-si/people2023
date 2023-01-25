@@ -314,9 +314,10 @@ emoji-regex@^8.0.0:
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-8.0.0.tgz#e818fd69ce5ccfcb404594f842963bf53164cc37"
   integrity sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==
 
-epfl-elements@epfl-si/elements:
-  version "3.5.0"
-  resolved "https://codeload.github.com/epfl-si/elements/tar.gz/077f12999664a7a0dfc0442be2894c5dfea5fb2a"
+epfl-elements@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.npmjs.org/epfl-elements/-/epfl-elements-4.0.0.tgz#d1eb0455e8465f8d2b9a67620fd1dbeba5ad2283"
+  integrity sha512-2Gr/ypXvQCDZW6qOUdnd2JVE5lqeOudqxpRHR/Riq8H9nrGjlOHXFnV4mD/ct8AX4i56ZkVgfZ16M2Rd8VP3UQ==
   dependencies:
     "@selectize/selectize" "^0.13.6"
     bootstrap "^4.5.2"
