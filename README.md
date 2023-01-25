@@ -3,6 +3,7 @@
 ## Pre-requisites
 
 You need the following installed on your system to run this application in development mode:
+
 - Ruby version 3.x — 💡 Use [this PPA](https://launchpad.net/~instructure/+archive/ubuntu/ruby) to install it on older versions of Ubuntu Linux
 - Node version 14.16 or later
 - The `yarn` command somehow available in your `$PATH`
@@ -90,8 +91,9 @@ React being what it is though, JSX and all, it demands some kind of build proces
 It has become fashionable to split Web apps between front-end and back-end, if only to provide division of labor for those who hate JavaScript (see above). Security can become a problem at the interface between both.
 
 With OpenID Connect, which is kind of a successor-in-interest to the best parts of OAuth, we picked a modern and scalable system that supports even the most demanding requirements, such as
+
 - **extensible access control policies** from plain old ad-hoc access groups to roles (either simple or decorated with metadata that maps to your organization's permission hierarchy),
-- **pseudonymous access / audit logs:** thanks to the distinction between *ID tokens* and *access tokens* in OAuth, it is possible to set up your Keycloak, SATOSA or other OpenID-compatible server so that the front-end shows the logged user's first and last name, while the back-end only gets to know some ephemeral user identifier that will die with the session, and an app-specific set of permissions. (With little or no change required in your app of course.)
+- **pseudonymous access / audit logs:** thanks to the distinction between _ID tokens_ and _access tokens_ in OAuth, it is possible to set up your Keycloak, SATOSA or other OpenID-compatible server so that the front-end shows the logged user's first and last name, while the back-end only gets to know some ephemeral user identifier that will die with the session, and an app-specific set of permissions. (With little or no change required in your app of course.)
 
 ### Keycloak
 
@@ -103,8 +105,8 @@ Once your front-end is authenticated, it will want to talk to the back-end. Grap
 
 ## Opinions
 
-### GraphQL and OpenID *only*, or: Web 1.0 CRUD (and REST) Considered Obsolete
+### GraphQL and OpenID _only_, or: Web 1.0 CRUD (and REST) Considered Obsolete
 
-In the out-of-the-box configuration for this demo app, *only* the `/graphql` URL is protected by OpenID access control. We posit that this is, in fact, a reasonable approach to security; and that you might want to consider designing your app so that there is no need for additional protection.
+In the out-of-the-box configuration for this demo app, _only_ the `/graphql` URL is protected by OpenID access control. We posit that this is, in fact, a reasonable approach to security; and that you might want to consider designing your app so that there is no need for additional protection.
 
 GraphQL provides for all your data access and mutation needs. It is pretty straightforward to enforce the security policy (for both access control and auditing) by checking for a so-called OpenID “claim” that is mapped to a role directly from within the relevant GraphQL controllers. The rest of your app should not disclose information (except information intended for public use) at any other endpoint; nor should it permit any mutation except, over GraphQL. In other words, you should refrain from using “traditional” Rails controllers and Web templates (either Web 1.0-style with `application/x-www-form-urlencoded` POSTs; or “modern” REST-style APIs with other HTTP verbs), except to serve “traditional” Web content (using HTTP GET) to unauthenticated users (such as search engines). Examples of concerns that you will be able to disregard entirely are [XSRF tokens](https://guides.rubyonrails.org/action_controller_overview.html#request-forgery-protection) (and the secret management headaches they entail when [deploying a load-balanced Rails app](https://www.jetbrains.com/help/ruby/capistrano.html#credentials)), [ad-hoc signaling and UX](https://www.rubyguides.com/2019/11/rails-flash-messages/), and more.
