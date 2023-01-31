@@ -5,21 +5,46 @@
 #   gem "sqlite3"
 #
 default: &default
-  adapter: sqlite3
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  timeout: 5000
+  adapter: mysql2
 
 development:
   <<: *default
-  database: db/development.sqlite3
+  host: mariadb
+  database: people
+  username: root
+  password: mariadb
+
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: db/test.sqlite3
+  database: people
 
 production:
   <<: *default
-  database: db/production.sqlite3
+  database: people
+
+# ---------------------------------------------------------- External/Legacy DBs
+legacy_dev_default: &legacy_dev 
+  adapter: mysql2
+  host: mariadb
+  username: root
+  password: mariadb
+
+legacy_dev_accred:
+  <<: *legacy_dev
+  database: accred
+
+legacy_dev_cadi:
+  <<: *legacy_dev
+  database: cadi
+
+legacy_dev_cv:
+  <<: *legacy_dev
+  database: cv
+
+legacy_dev_dinfo:
+  <<: *legacy_dev
+  database: dinfo

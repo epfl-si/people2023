@@ -40,5 +40,9 @@ services:
     volumes:
       - mariadb:/var/lib/mysql
       - ./keycloak/initdb.d:/docker-entrypoint-initdb.d
+  people:
+    build: .
+    env_file: .env
+
 volumes:
   mariadb: {}
