@@ -11,9 +11,10 @@ RUN apt-get update && apt-get install -y \
 	build-essential \
 	mariadb-client \
 	nodejs \
-	yarnpkg \
+	# yarnpkg \
 	--no-install-recommends && rm -rf /var/lib/apt/lists/*
-RUN ln -s /usr/bin/yarnpkg /usr/bin/yarn
+# RUN ln -s /usr/bin/yarnpkg /usr/bin/yarn
+RUN npm install --global yarn
 
 RUN gem install bundler:2.3.7
 ADD Gemfile* $APP_HOME/

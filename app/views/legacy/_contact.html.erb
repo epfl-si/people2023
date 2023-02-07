@@ -1,0 +1,36 @@
+<TMPL_IF NAME=titre_show>
+<h4><TMPL_VAR NAME=titre></h4>
+</TMPL_IF>
+<p>
+  <TMPL_IF NAME=email>
+  <a href="mailto:<TMPL_VAR NAME=email>" class="btn btn-sm btn-primary">
+  	<TMPL_VAR NAME=email>
+  </a>
+  </TMPL_IF>
+
+  <TMPL_IF NAME=phone_princ>
+  <span class="people-btn"><TMPL_VAR NAME=phone_princ_link></span>
+  </TMPL_IF>
+
+  <TMPL_IF NAME=edit_profile>
+  <TMPL_IF NAME=web_perso>
+    <a href="<TMPL_VAR NAME=web_perso>" class="btn btn-sm btn-secondary">
+    	<TMPL_VAR NAME=web_perso>
+    </a>
+  </TMPL_IF>
+  </TMPL_IF><!-- edit_profile -->
+</p>
+
+<TMPL_IF NAME=edit_profile>
+<TMPL_IF NAME=nat>
+<p>
+	<TMPL_VAR NAME=nat_label> : <TMPL_VAR NAME=nat>
+</p>
+</TMPL_IF>
+
+<TMPL_IF NAME=datenaiss_show>
+<p>
+	<TMPL_VAR NAME=datenaiss_label> : <TMPL_VAR NAME=date_naiss>
+</p>
+</TMPL_IF>
+</TMPL_IF><!-- edit_profile -->

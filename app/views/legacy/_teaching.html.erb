@@ -1,0 +1,95 @@
+<div class="people-contents mt30">
+  <h3 id="teaching-and-phd">
+    <TMPL_VAR NAME=teachingandphd_label>
+  </h3>
+  <div class="people-contents">
+    <TMPL_IF NAME=primarysections><!--      TEACHING SECT   -->
+    <div class="cmt-5">
+      <h4><TMPL_VAR NAME=teaching_label></h4>
+      <p>
+        <TMPL_VAR NAME=primarysections>
+      </p>
+      <TMPL_IF NAME=secondarysections>
+      <p>
+        <TMPL_VAR NAME=secondarysections>
+      </p>
+      </TMPL_IF>
+    </div>
+    </TMPL_IF><!--  TEACHING SECT   -->
+
+    <TMPL_IF NAME=progsdoct><!--    PROG DOCT       -->
+    <div class="cmt-5">
+      <h4>
+        <TMPL_VAR NAME=phdprogs_label>
+      </h4>
+      <TMPL_LOOP NAME=progsdoct>
+        <p><TMPL_VAR NAME=label></p>
+      </TMPL_LOOP>
+    </div>
+    </TMPL_IF>
+  </div>
+
+  <TMPL_IF NAME=anydoctact>
+  <div class="cmt-5 mt30">
+    <TMPL_IF NAME=crtdoctact>
+    <h4>
+      <TMPL_VAR NAME=phdstuds_label>
+    </h4>
+    <TMPL_LOOP NAME=crtdoctact>
+      <a href="/<TMPL_VAR NAME=mailId>"><TMPL_VAR NAME=name></a>, 
+    </TMPL_LOOP>
+    </TMPL_IF><!-- crtdoctact -->
+
+    <TMPL_IF NAME=pastdoctact>
+    <h4 class="cmt-5 mt30">
+      <TMPL_VAR NAME=pastphdstuds_label>
+    </h4>
+    <TMPL_LOOP NAME=pastdoctact>
+      <TMPL_IF NAME=thesisNumber>
+      <a href="http://dx.doi.org/10.5075/epfl-thesis-<TMPL_VAR NAME=thesisNumber>">
+        <TMPL_VAR NAME=name>
+      </a>
+      <TMPL_ELSE>
+      <TMPL_VAR NAME=name> 
+      </TMPL_IF>,
+    </TMPL_LOOP>
+    </TMPL_IF><!-- pastdoctact -->
+  </div>
+  </TMPL_IF><!-- anydoctact -->
+
+  <TMPL_IF NAME=teachingloop>
+  <div class="col-md12">
+    <TMPL_LOOP NAME=teachingloop>
+      <h2 style="margin-top: 20px;">
+        <TMPL_VAR NAME=boxlabel>
+      </h2>
+      <TMPL_VAR NAME=boxcontent>
+    </TMPL_LOOP>
+  </div>
+  </TMPL_IF><!-- teachingloop -->
+
+  <TMPL_IF NAME=courses>
+  <div class="cmt-5 mt30">
+    <h3 id="courses">
+      <TMPL_VAR NAME=courses_label>
+    </h3>
+    <div class="list-group" id="cours-text" >
+      <TMPL_LOOP NAME=courses>
+        <div class="course_box">
+          <h4>
+            <TMPL_IF NAME=X_URL>
+            <a href="<TMPL_VAR NAME="X_URL">">
+              <TMPL_VAR NAME="X_MATIERE">
+            </a> 
+            <TMPL_ELSE>
+            <TMPL_VAR NAME="X_MATIERE">
+            </TMPL_IF>
+          </h4>
+          <TMPL_VAR NAME="X_OBJECTIFS">
+          <hr class="dotted">
+        </div>
+      </TMPL_LOOP><!-- courses -->
+    </div>
+  </div>
+  </TMPL_IF><!-- courses -->
+</div>

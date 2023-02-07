@@ -82,3 +82,6 @@ end
 
 # Used to generate mock data:
 gem "prime", "~> 0.1.2"
+
+# To enable CORS from keycloak
+gem 'rack-cors'

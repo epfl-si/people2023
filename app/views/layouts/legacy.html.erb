@@ -8,14 +8,25 @@
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    <%= render "layouts/legacy/favicons" %>
     <%= render "layouts/epfl-elements/head" %>
   </head>
 
   <body>
-    <div class="container">
-    <%= render "layouts/epfl-elements/nav-fr" unless @disable_nav %>
-    <%= yield %>
-    <%= render "layouts/epfl-elements/footer-fr" %>
+    <%= render "layouts/legacy/header" %>
+
+    <div class="main-container">
+      <div class="overlay"></div>
+      
+      <div class="w-100 pb-5">
+        <main id="main" role="main" class="content">
+          <div class="container">
+            <%= yield %>
+          </div>
+        </main>
+      </div>
     </div>
+
+    <%= render "layouts/epfl-elements/footer-fr" %>
   </body>
 </html>

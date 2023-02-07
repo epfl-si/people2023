@@ -7,7 +7,14 @@
 # `db/migrate/*`):
 [ -d vendor/bundle ] || ./bin/bundle
 [ -d node_modules ] || yarn
-[ -f db/development.sqlite3 ] || ./bin/rails db:migrate db:seed
+
+
+echo "here is the content of db:"
+ls -l db
+
+# [ -f db/development.sqlite3 ] || ./bin/rails db:migrate db:seed
+
+echo "Starting rails server on PORT: '$PORT', ADDR: '$ADDR'"
 
 cd "$(dirname "$0")/.."
-node_modules/.bin/concurrently -c red,blue -n puma,esbuild "./bin/rails server" "yarn build --watch"
+node_modules/.bin/concurrently -c red,blue -n puma,esbuild "./bin/rails server -p ${PORT:-3000} -b ${ADDR:-127.0.0.1}" "yarn build --watch"

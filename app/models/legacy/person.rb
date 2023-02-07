@@ -16,6 +16,8 @@ class Legacy::Person < Legacy::BaseDinfo
   has_many :postal_addresses, :class_name => "PostalAddress", :foreign_key => "sciper"
 
   has_many :accreds, :class_name => "Accreditation", :foreign_key => "persid"
+
+  # This does not work. I think because it is missing the class for Accreditation and looks for the accreds table in dinfo db
   has_and_belongs_to_many :units, :join_table => "accreds", :foreign_key => "persid", :association_foreign_key => "unitid"
 
   # strftime is needed because we had to cast all datetimes into strings

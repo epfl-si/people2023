@@ -2,7 +2,7 @@
 # is *not* meant for production.
 
 version: '3'
-name: hellorails
+name: people2023
 
 services:
   # Keycloak is an OpenID-Connect IdP (Identity Provider) that is easy
@@ -22,12 +22,25 @@ services:
       KC_DB_PASSWORD: mariadb
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+      # KC_HOSTNAME: ${KC_HOSTNAME:-http://localhost}
+      # KC_HOSTNAME: keycloak.epfl.cz
+      # KC_HOSTNAME_PORT: 443
+      # KC_HTTP_ENABLED: true
     ports:
       # Since the Keycloak password is easy to guess, opening up this
       # port further than localhost is *not* recommended.
-      - "127.0.0.1:8080:8080"
+      - "${KCPORTEXT:-127.0.0.1:8080:}8080"
+    labels:
+      - traefik.docker.network=traefik
+      - traefik.http.services.keycloak.loadbalancer.server.port=${KCPORT:-8080}
+      - traefik.http.routers.keycloak.rule=Host("keycloak.${DOMAIN:-dev.jkldsa.com}")
+      - traefik.http.routers.keycloak.tls=true
     volumes:
-      - ./keycloak/import:/opt/keycloak/data/import
+      - ./keycloak/import_${KCREALM:-default}:/opt/keycloak/data/import
+    networks:
+      - traefik
+      - default
+
   # MariaDB is used by Keycloak for persistence. The Rails application
   # itself uses sqlite in development (which unfortunately, is not an
   # option for Keycloak at the moment).
@@ -39,10 +52,17 @@ services:
       MARIADB_ROOT_PASSWORD: mariadb
     volumes:
       - mariadb:/var/lib/mysql
-      - ./keycloak/initdb.d:/docker-entrypoint-initdb.d
-  people:
+      - ./keycloak/initdb.d/keycloak-database-and-user.sql:/docker-entrypoint-initdb.d/keycloak-database-and-user.sql:ro
+      - ./db/legacy_setup.sql:/docker-entrypoint-initdb.d/legacy_setup.sql:ro
+    networks:
+      - default
+  webapp:
     build: .
     env_file: .env
 
 volumes:
   mariadb: {}
+
+networks:
+  traefik:
+    external: true

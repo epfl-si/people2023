@@ -1,0 +1,16 @@
+<TMPL_IF NAME=research><!-- RESEARCH    -->
+<div class="people-contents mt30">
+  <h3 id="research">
+    <TMPL_VAR NAME=research_label>
+  </h3>
+  <div class="collapse collapse-partial" id="research-text" aria-expanded="false">
+    <TMPL_LOOP NAME=research>
+      <h4 style="margin-top: 20px;"><TMPL_VAR NAME=boxlabel></h4>
+      <TMPL_VAR NAME=boxcontent>
+    </TMPL_LOOP>
+  </div>
+  <button class="collapsed btn btn-light btn-block btn-sm mt-3" data-toggle="collapse" data-target="#research-text" aria-hidden="true" aria-controls="research-text" onclick="toggleCollapse('research');">
+    <div id="research-more_less">Show more</div>
+  </button>                       
+</div>
+</TMPL_IF><!-- RESEARCH -->

@@ -28,4 +28,8 @@ class Legacy::Cv < Legacy::BaseCv
     end
   end
 
+  # TODO
+  def photo_url
+    "https://via.placeholder.com/400"
+  end
 end

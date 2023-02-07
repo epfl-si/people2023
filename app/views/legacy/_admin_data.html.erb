@@ -1,0 +1,64 @@
+<p class="mt-4"><!-- ADMIN DATA -->
+  <small>
+    <a href="<TMPL_VAR NAME=path_info>/vcard" >
+      <span style="vertical-align: text-bottom;">vCard</span>
+    </a>
+  </small>
+  <br>
+
+  <TMPL_IF NAME=user><!-- user -->
+  
+  <TMPL_IF NAME=showadmindata><!-- showadmindata -->
+  <!--    ALL UNITS       -->
+  <small>
+    <a href="#" onclick="document.getElementById('all_units').style.display='block';">
+      <TMPL_VAR NAME=all_units_label>
+    </a>
+  </small>
+  <br>
+  </TMPL_IF><!-- showadmindata -->
+
+  <!--    LISTS   -->
+  <small>
+    <a href="https://cadiwww.epfl.ch/listes?sciper=<TMPL_VAR NAME=sciper>">
+      <TMPL_VAR NAME=listes_label> <TMPL_VAR NAME=prenom> <TMPL_VAR NAME=nom>
+    </a>
+  </small>
+  <br>
+
+  <!--    ACCREDS -->
+  <button class="collapse-title collapse-title-desktop collapsed" type="button" data-toggle="collapse"  onclick="toggleVis('admin-data')">
+    <span style="font-size:small; font-weight: normal;">
+      <TMPL_VAR NAME=admin_data_label>
+    </span>
+  </button>
+  <div id="admin-data" style="display: none;">
+    <dl class="definition-list definition-list-grid data-list" style="font-size: smaller;">
+      <dt><TMPL_VAR NAME=admindata_label_sciper></dt>
+      <dd><TMPL_VAR NAME=sciper></dd>
+      <dt><TMPL_VAR NAME=admindata_label_sap></dt>
+      <dd><TMPL_VAR NAME=numsap></dd>
+      <dt>Username</dt>
+      <dd><TMPL_VAR NAME=user></dd>
+      <dt>GID</dt>
+      <dd><TMPL_VAR NAME=gid></dd>
+      <dt>UID</dt>
+      <dd><TMPL_VAR NAME=uid></dd>
+      <dt>Home directory</dt>
+      <dd><TMPL_VAR NAME=home></dd>
+      <dt>Shell</dt>
+      <dd><TMPL_VAR NAME=shell></dd>
+    </dl>
+  </div>
+
+  <TMPL_ELSE><!-- user -->
+  <small>
+    <svg class="icon" aria-hidden="true">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-lock"></use>
+    </svg>
+    <a href="<TMPL_VAR NAME=path_info>/admindata">
+      <TMPL_VAR NAME=admin_data_label>
+    </a>
+  </small>
+  </TMPL_IF><!-- user -->
+</p><!-- ADMIN DATA -->

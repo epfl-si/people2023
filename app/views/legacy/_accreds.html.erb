@@ -1,0 +1,83 @@
+<TMPL_LOOP NAME=accreds> 
+  <button id="collapse-arrow-<TMPL_VAR NAME=indx>" class="collapse-title <TMPL_IF NAME=expand><TMPL_ELSE>collapsed</TMPL_IF> collapse-title-desktop" type="button" data-toggle="collapse" data-target="#collapse-<TMPL_VAR NAME=indx>" aria-expanded="<TMPL_IF NAME=expand>true<TMPL_ELSE>false</TMPL_IF>" aria-controls="collapse-<TMPL_VAR NAME=indx>" onClick="toggleVis('collapse-<TMPL_VAR NAME=indx>'); toggleArrow('collapse-<TMPL_VAR NAME=indx>', 'collapse-arrow-<TMPL_VAR NAME=indx>'); ">
+    <strong><TMPL_VAR NAME=fonction></strong>
+      <TMPL_IF NAME=delegue_classe>
+      <br>
+      <strong><TMPL_VAR NAME="delegue_classe"></strong>
+      </TMPL_IF>
+      <span class="font-weight-normal">, <TMPL_VAR NAME=label></span>
+  </button>
+
+  <div class="collapse collapse-item <TMPL_IF NAME=expand>show<TMPL_ELSE></TMPL_IF> collapse-item-desktop" id="collapse-<TMPL_VAR NAME=indx>">
+    <div class="row pt-2 pb-2"><!-- ROW 5 -->
+      <TMPL_IF NAME=adresse>
+      <div class="col-md-6">
+        <p itemprop="location" itemscope="" itemtype="http://schema.org/Place">
+          <span itemprop="address"><TMPL_VAR NAME=adresse></span>
+        </p>
+      </div>
+      </TMPL_IF>
+
+      <div class="<TMPL_VAR NAME=phone_div_class>">
+        <p>
+          <TMPL_LOOP NAME=phones><!-- MERGE PHONES AND OFFICES LOOPS -->
+            <TMPL_UNLESS NAME=phone_hidden>
+            <TMPL_IF NAME=phone_link>
+            <span class="people-btn"><TMPL_VAR NAME=phone_link></span><br>
+            </TMPL_IF>
+            </TMPL_UNLESS>
+          </TMPL_LOOP>
+
+          <TMPL_IF NAME=rooms>
+          <TMPL_LOOP NAME=rooms>
+            <TMPL_UNLESS NAME=room_hidden>
+            <small>
+              <TMPL_VAR NAME=room_label>: 
+              <a href="https://plan.epfl.ch?room==<TMPL_VAR NAME=room_ref>">
+                <TMPL_VAR NAME=room_name>
+              </a>
+            </small>
+            <br>
+            </TMPL_UNLESS>
+          </TMPL_LOOP>
+          </TMPL_IF>
+
+          <TMPL_IF NAME=room>
+          <small>
+            <TMPL_VAR NAME=room_label>: 
+            <a href="https://plan.epfl.ch?room==<TMPL_VAR NAME=room_ref>">
+              <TMPL_VAR NAME=room>
+            </a>
+          </small>
+          <br>
+          </TMPL_IF>
+
+          <TMPL_LOOP NAME=path_loop>
+            <small>
+              <a href="<TMPL_VAR NAME=search_path>">
+                <TMPL_VAR NAME=path>
+              </a>
+              <TMPL_UNLESS NAME=last>></TMPL_UNLESS>
+            </small>
+          </TMPL_LOOP>                                    
+        </p>
+      </div>
+
+      <TMPL_IF NAME=uniturl>
+      <div class="col-sm-12">
+        <p>
+          <span class="sr-only">Web site: </span>
+          <small>
+            <TMPL_VAR NAME=unit_web_label>: 
+            <a href="<TMPL_VAR NAME=uniturl>">
+              <TMPL_VAR NAME=uniturl>
+            </a>
+          </small>
+        </p>
+      </div>
+      </TMPL_IF>
+
+    </div><!-- ROW 5 -->
+  </div>
+</TMPL_LOOP><!-- accreds -->
+  

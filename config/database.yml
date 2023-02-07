@@ -5,14 +5,11 @@
 #   gem "sqlite3"
 #
 default: &default
-  adapter: mysql2
+  adapter: sqlite3
 
 development:
   <<: *default
-  host: mariadb
   database: people
-  username: root
-  password: mariadb
 
 
 # Warning: The database defined as "test" will be erased and
@@ -30,7 +27,7 @@ production:
 legacy_dev_default: &legacy_dev 
   adapter: mysql2
   host: mariadb
-  username: root
+  username: people
   password: mariadb
 
 legacy_dev_accred:

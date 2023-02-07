@@ -1,0 +1,18 @@
+                                      <TMPL_LOOP NAME=researchids_loop>
+                                        <TMPL_IF NAME=id_show>
+                                          <TMPL_IF NAME=content>
+                                            <div style="width:100%; float:left;">
+                                              <TMPL_IF NAME=url>
+                                                <a href="<TMPL_VAR NAME=url>" target="_blank">
+                                                  <img src="<TMPL_VAR NAME=img>" style="height:20px; padding-right: 5px; vertical-align: middle" title="<TMPL_VAR NAME=label>" />
+                                                    <span style="font-size: smaller;"><TMPL_VAR NAME=toshow></span>
+                                                    </a>
+                                                    <TMPL_ELSE>
+                                                      <img src="<TMPL_VAR NAME=img>" style="height:20px; padding-right: 5px; vertical-align: middle" title="<TMPL_VAR NAME=label>">
+                                                        <span style="font-size: smaller;"><TMPL_VAR NAME=toshow></span>
+                                                        </TMPL_IF>
+                                                      </div>
+                                                    </TMPL_IF>
+                                                  </TMPL_IF>
+                                                </TMPL_LOOP>
+
