@@ -1,5 +1,3 @@
-CREATE USER 'people'@'%' IDENTIFIED BY 'mariadb';
-
 CREATE DATABASE accred;
 GRANT ALL PRIVILEGES ON accred.* TO 'people'@'%';
 

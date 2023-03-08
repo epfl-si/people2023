@@ -30,11 +30,18 @@ class Legacy::Person < Legacy::BaseDinfo
   has_many :active_policies, -> { where("#{Legacy::Policy.table_name}.finval IS NULL OR #{Legacy::Policy.table_name}.finval > ?", Date.today.strftime) }, :class_name => "Policy", :foreign_key => "persid"
   has_many :active_properties, :class_name => "Property", :through => :active_policies, :foreign_key => "persid", :source => "property"
 
+  has_many :accred_prefs, :class_name => "AccredPref", :foreign_key => "sciper"
+
   def self.find_by_name_dot_surname(nds)
     e = Legacy::Email.where("addrlog = ? OR addrlog LIKE ?", "#{nds}@epfl.ch", "#{nds}@epfl.%").first
     raise ActiveRecord::RecordNotFound.new("Person with email base #{nds} not found") if e.nil?
     find(e.sciper)
   end
+
+  def display_name
+    "#{self.prenom_usuel || self.prenom_acc} #{self.nom_usuel || self.nom_acc}"
+  end
+
 
   def email_address
     self.email.addrlog
@@ -57,13 +64,13 @@ class Legacy::Person < Legacy::BaseDinfo
         self.active_positions.map{|p| p.labelfr}.include?('Professeur honoraire')
   end
 
-  # def method_missing(method_id, *arguments, &block)
-  #   if self.data.respond_to?(method_id)
-  #     self.data.send(method_id, *arguments)
-  #   else
-  #     super
-  #   end
-  # end
+  def method_missing(method_id, *arguments, &block)
+    if self.data.respond_to?(method_id)
+      self.data.send(method_id, *arguments)
+    else
+      super
+    end
+  end
 
   # TODO: cache this because it is quie slow
   def atela_accreds
@@ -71,4 +78,9 @@ class Legacy::Person < Legacy::BaseDinfo
     @atela_accreds.empty? ? nil : @atela_accreds["accreds"]
   end
 
+  def phone_princ
+    @phone_princ ||= begin
+      1234
+    end
+  end
 end

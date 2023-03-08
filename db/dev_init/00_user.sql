@@ -1,0 +1,1 @@
+CREATE USER 'people'@'%' IDENTIFIED BY 'mariadb';

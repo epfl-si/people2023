@@ -1,6 +1,6 @@
-<TMPL_LOOP NAME=accreds> 
-  <button id="collapse-arrow-<TMPL_VAR NAME=indx>" class="collapse-title <TMPL_IF NAME=expand><TMPL_ELSE>collapsed</TMPL_IF> collapse-title-desktop" type="button" data-toggle="collapse" data-target="#collapse-<TMPL_VAR NAME=indx>" aria-expanded="<TMPL_IF NAME=expand>true<TMPL_ELSE>false</TMPL_IF>" aria-controls="collapse-<TMPL_VAR NAME=indx>" onClick="toggleVis('collapse-<TMPL_VAR NAME=indx>'); toggleArrow('collapse-<TMPL_VAR NAME=indx>', 'collapse-arrow-<TMPL_VAR NAME=indx>'); ">
-    <strong><TMPL_VAR NAME=fonction></strong>
+<% @person.active_accreds.each_with_index do |accred, indx| %>
+  <button id="collapse-arrow-<%= indx %>" class="collapse-title <%= 'collapsed' if indx>0 %> collapse-title-desktop" type="button" data-toggle="collapse" data-target="#collapse-<%= indx %>" aria-expanded="<%= indx>0 ? 'false' : 'true' %>" aria-controls="collapse-<%= indx %>" onClick="toggleVis('collapse-<%= indx %>'); toggleArrow('collapse-<%= indx %>', 'collapse-arrow-<%= indx %>'); ">
+    <strong><%= accred.function %></strong>
       <TMPL_IF NAME=delegue_classe>
       <br>
       <strong><TMPL_VAR NAME="delegue_classe"></strong>
@@ -79,5 +79,4 @@
 
     </div><!-- ROW 5 -->
   </div>
-</TMPL_LOOP><!-- accreds -->
-  
+<% end %>  

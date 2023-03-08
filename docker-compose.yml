@@ -1,5 +1,6 @@
 # This docker-compose.yml file is intended for development support. It
 # is *not* meant for production.
+# https://www.keycloak.org/server/reverseproxy
 
 version: '3'
 name: people2023
@@ -40,6 +41,8 @@ services:
     networks:
       - traefik
       - default
+    profiles:
+      - kc
 
   # MariaDB is used by Keycloak for persistence. The Rails application
   # itself uses sqlite in development (which unfortunately, is not an
@@ -53,7 +56,7 @@ services:
     volumes:
       - mariadb:/var/lib/mysql
       - ./keycloak/initdb.d/keycloak-database-and-user.sql:/docker-entrypoint-initdb.d/keycloak-database-and-user.sql:ro
-      - ./db/legacy_setup.sql:/docker-entrypoint-initdb.d/legacy_setup.sql:ro
+      - ./db/dev_setup:/docker-entrypoint-initdb.d
     networks:
       - default
   webapp:

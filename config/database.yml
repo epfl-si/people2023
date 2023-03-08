@@ -5,11 +5,14 @@
 #   gem "sqlite3"
 #
 default: &default
-  adapter: sqlite3
+  adapter: mysql2
 
 development:
   <<: *default
   database: people
+  host: mariadb
+  username: people
+  password: mariadb
 
 
 # Warning: The database defined as "test" will be erased and
