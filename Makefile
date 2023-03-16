@@ -12,10 +12,10 @@ DINFO_TABLES = SwitchAAIUsers accounts accred adrspost allunits annu delegues em
 # make use of lazy evaluation for using variables as function parameters
 MYSQL = docker-compose -f $(COMPOSE) exec -T mariadb bash -c 'mysql -u root --password=mariadb'
 MYSQLDB = docker-compose -f $(COMPOSE) exec -T mariadb bash -c 'mysql -u root --password=mariadb $(DB)'
-# MYSQLDUMP=ssh $(DATASRC) "mysqldump -h $(DB_HOST) -u $(DB_USER) -p'$(DB_PASS)' $(DB) $(TABLES) | gzip"
-# DB_HOST = $(shell ssh $(DATASRC) cat /opt/dinfo/etc/dbs.conf | awk '($$1 == "$(DB)"){printf("%s", $$3);}')
-# DB_USER = $(shell ssh $(DATASRC) cat /opt/dinfo/etc/dbs.conf | awk '($$1 == "$(DB)"){printf("%s", $$4);}')
-# DB_PASS = $(shell ssh $(DATASRC) cat /opt/dinfo/etc/dbs.conf | awk '($$1 == "$(DB)"){printf("%s", $$5);}')
+MYSQLDUMP = ssh $(DATASRC) "mysqldump -h $(DB_HOST) -u $(DB_USER) -p'$(DB_PASS)' $(DB) $(TABLES) | gzip"
+DB_HOST = $(shell ssh $(DATASRC) cat /opt/dinfo/etc/dbs.conf | awk '($$1 == "$(DB)"){printf("%s", $$3);}')
+DB_USER = $(shell ssh $(DATASRC) cat /opt/dinfo/etc/dbs.conf | awk '($$1 == "$(DB)"){printf("%s", $$4);}')
+DB_PASS = $(shell ssh $(DATASRC) cat /opt/dinfo/etc/dbs.conf | awk '($$1 == "$(DB)"){printf("%s", $$5);}')
 
 COMPOSE ?= docker-compose.yml
 
