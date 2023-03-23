@@ -30,5 +30,10 @@ module HelloRails
     if Rails.env.development?
       GraphiQL::Rails.config.csrf = false
     end
+
+    # config.generators do |g|
+    #   g.helper false
+    #   g.assets false
+    # end
   end
 end

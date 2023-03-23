@@ -21,11 +21,13 @@
                   <%= render 'contact' %>
                   <!-- CONTACT -->
                 </div>
+                <% if @cv %>
                 <div class="col-sm-12 ">
                   <div style="width: 80%; padding-top: 15px;">
                     <%= render 'research_ids' %>
                   </div>
                 </div>
+                <% end %>
                 <!--
                 <TMPL_IF NAME=contact>
                   <TMPL_IF NAME=edit_profile>

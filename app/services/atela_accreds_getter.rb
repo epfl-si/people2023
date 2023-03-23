@@ -6,17 +6,18 @@ class AtelaAccredsGetter < ApplicationService
   end
 
   def fetch
+    # curl -H 'Authorization: People.key ATELA_KEY' https://atela.epfl.ch/cgi-bin/atela-backend/getPerson/121769
     url="#{ENV.fetch("ATELA_BACKEND_URL")}/getPerson/#{@id}"
-    key=ENV.fetch("ATELA_KEY")
+    key="People.key " + ENV.fetch("ATELA_KEY")
     uri=URI.parse(url)
     opts={:use_ssl => true, :read_timeout => 100}
-    req = Net::HTTP::Post.new(uri)
+    req = Net::HTTP::Get.new(uri)
     req['authorization'] = key
     res = Net::HTTP.start(uri.hostname, uri.port, opts) do |http|
       http.request(req)
     end
     case res
-    when Net::HTTPSuccess then
+    when Net::HTTPOK then
       JSON.parse(res.body)
     else
       nil

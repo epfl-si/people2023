@@ -1,22 +1,23 @@
 <% @person.active_accreds.each_with_index do |accred, indx| %>
-  <button id="collapse-arrow-<%= indx %>" class="collapse-title <%= 'collapsed' if indx>0 %> collapse-title-desktop" type="button" data-toggle="collapse" data-target="#collapse-<%= indx %>" aria-expanded="<%= indx>0 ? 'false' : 'true' %>" aria-controls="collapse-<%= indx %>" onClick="toggleVis('collapse-<%= indx %>'); toggleArrow('collapse-<%= indx %>', 'collapse-arrow-<%= indx %>'); ">
-    <strong><%= accred.function %></strong>
-      <TMPL_IF NAME=delegue_classe>
-      <br>
-      <strong><TMPL_VAR NAME="delegue_classe"></strong>
-      </TMPL_IF>
-      <span class="font-weight-normal">, <TMPL_VAR NAME=label></span>
-  </button>
+  <%= ee_collapse(accred_function_with_class_delegate(accred)) do -%>
+    <% if accred.address %>
+    <% phoneclass="col-md-6" %> 
+    <div class="col-md-6">
+      <p itemprop="location" itemscope="" itemtype="http://schema.org/Place">
+        <span itemprop="address"><%= accred.address %></span>
+      </p>
+    </div>
+    <% else %>
+    <% phoneclass="col-md-12" %> 
+    <% end %>
+    <div class="<%= phoneclass %>">
+      <% accred.phones.each do |phone| %>
+        <%= phone_link(phone) unless phone.phone_hidden %>
+      <% end %>
+    </div>
+  <% end -%>
+<% end %>
 
-  <div class="collapse collapse-item <TMPL_IF NAME=expand>show<TMPL_ELSE></TMPL_IF> collapse-item-desktop" id="collapse-<TMPL_VAR NAME=indx>">
-    <div class="row pt-2 pb-2"><!-- ROW 5 -->
-      <TMPL_IF NAME=adresse>
-      <div class="col-md-6">
-        <p itemprop="location" itemscope="" itemtype="http://schema.org/Place">
-          <span itemprop="address"><TMPL_VAR NAME=adresse></span>
-        </p>
-      </div>
-      </TMPL_IF>
 
       <div class="<TMPL_VAR NAME=phone_div_class>">
         <p>
@@ -79,4 +80,50 @@
 
     </div><!-- ROW 5 -->
   </div>
-<% end %>  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="collapse collapse-item collapse-item-desktop" id="collapse-3">
+    <div class="col-md-7">
+      <p itemprop="location" itemscope itemtype="http://schema.org/Place">
+        <strong itemprop="name">EPFL PRES</strong><br />
+        <span itemprop="address">
+          CE 3 316 (Centre Est)<br />
+          Station 1<br />
+          CH-1015 Lausanne
+        </span>
+      </p>
+    </div>
+    <div class="col-md-5">
+      <a href="tel:+41 21 666 77 88" class="btn btn-sm btn-secondary mb-2">+41 21 666 77 88</a><br />
+      <svg class="icon" aria-hidden="true">
+        <use xlink:href="#icon-twitter"></use>
+      </svg>
+      <a href="#">Website</a><br />
+      <svg class="icon" aria-hidden="true">
+        <use xlink:href="#icon-twitter"></use>
+      </svg>
+      <a href="#">Directory</a><br />
+      <svg class="icon" aria-hidden="true">
+        <use xlink:href="#icon-twitter"></use>
+      </svg>
+      <a href="#">CE 3 316</a>
+    </div>
+  </div>
+</div>
+
+

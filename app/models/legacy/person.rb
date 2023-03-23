@@ -47,15 +47,18 @@ class Legacy::Person < Legacy::BaseDinfo
     self.email.addrlog
   end
 
-  def main_phone
+  def phones
     if aa=atela_accreds
-      phones = aa.values.map{|v| v["phones"]}
-                 .flatten.sort{|a,b| a["phone_order"] <=> b["phone_order"]}
-                 .map{|p| p["phone_nb"]}
+      aa.values.map{|v| v["phones"]}
+        .flatten.sort{|a,b| a["phone_order"] <=> b["phone_order"]}
+        .map{|p| p["phone_nb"]}
     else
-      phones = self.offices.map{|p| [p["telephone1"], p["telephone2"]]}.flatten.compact
+      self.offices.map{|p| [p["telephone1"], p["telephone2"]]}.flatten.compact
     end
-    phones.first
+  end
+
+  def main_phone
+    self.phones.first
   end
 
   def can_edit_profile?
@@ -64,23 +67,25 @@ class Legacy::Person < Legacy::BaseDinfo
         self.active_positions.map{|p| p.labelfr}.include?('Professeur honoraire')
   end
 
-  def method_missing(method_id, *arguments, &block)
-    if self.data.respond_to?(method_id)
-      self.data.send(method_id, *arguments)
-    else
-      super
-    end
-  end
-
   # TODO: cache this because it is quie slow
   def atela_accreds
+    Rails.logger.debug("in atela_accreds")
     @atela_accreds ||= AtelaAccredsGetter.call(self.sciper) || {}
+    Rails.logger.debug(@atela_accreds)
     @atela_accreds.empty? ? nil : @atela_accreds["accreds"]
   end
 
-  def phone_princ
-    @phone_princ ||= begin
-      1234
+  # forward all getters that cannot be found to self.data (common table)
+  def method_missing(method_id, *arguments, &block)
+    if self.data 
+      if self.data.respond_to?(method_id)
+        self.data.send(method_id, *arguments)
+      else
+        super
+      end
+    else
+      # in some case self.data is nil (e.g. when the user haven't edited his page yet)
+      nil
     end
   end
 end

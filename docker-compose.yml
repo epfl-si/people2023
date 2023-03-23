@@ -2,10 +2,20 @@
 # is *not* meant for production.
 # https://www.keycloak.org/server/reverseproxy
 
-version: '3'
+version: '3.9'
 name: people2023
 
 services:
+  atela:
+    build: git@github.com:epfl-si/atela-backend.git
+    environment:
+      - MOCK_ORACLE=1
+      - SITE_URL=atela.${DOMAIN:-dev.jkldsa.com}
+    profiles:
+      - atela
+    working_dir: /var/www/vhosts/app/private/tests
+
+
   # Keycloak is an OpenID-Connect IdP (Identity Provider) that is easy
   # to set up. It mocks out that feature in the Rails application,
   # allowing testing with arbitrary users and groups. See further

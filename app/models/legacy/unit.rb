@@ -4,4 +4,13 @@ class Legacy::Unit < Legacy::BaseDinfo
 
 	has_many :accreditations, :class_name => "Accreditation", :foreign_key => "unitid"
 
+
+	def label(lang='fr')
+		case lang
+		when 'en'
+			self.libelle_en
+		else
+			self.libelle
+		end
+	end
 end

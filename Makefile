@@ -1,23 +1,10 @@
 -include .env
-export
 KBPATH = /keybase/team/epfl_people.prod
-
-DATASRC = dinfo@dinfo1.epfl.ch
-ACCRED_TABLES = accreds accreds_properties classes deputations guests positions properties properties_units properties_status properties_classes rights rights_classes rights_persons rights_roles rights_statuses rights_units roles_persons statuses
-CADI_TABLES = DBClients Manco WSAppsCallers WSAppsHosts WSClients WSServices batch_executions batch_params champs config datafields datatypes dbs delegates eventstypes filters operations pendingnotifications providers resources resources_types subscriptions tbls
-CV_TABLES = 
-DINFO_TABLES = SwitchAAIUsers accounts accred adrspost allunits annu delegues emails externalids fonds groups isa_codes Personnel sciper unites_reorg21 unites unites1 isa_etu
-
-# database manipulation commands 
-# make use of lazy evaluation for using variables as function parameters
-MYSQL = docker-compose -f $(COMPOSE) exec -T mariadb bash -c 'mysql -u root --password=mariadb'
-MYSQLDB = docker-compose -f $(COMPOSE) exec -T mariadb bash -c 'mysql -u root --password=mariadb $(DB)'
-MYSQLDUMP = ssh $(DATASRC) "mysqldump -h $(DB_HOST) -u $(DB_USER) -p'$(DB_PASS)' $(DB) $(TABLES) | gzip"
-DB_HOST = $(shell ssh $(DATASRC) cat /opt/dinfo/etc/dbs.conf | awk '($$1 == "$(DB)"){printf("%s", $$3);}')
-DB_USER = $(shell ssh $(DATASRC) cat /opt/dinfo/etc/dbs.conf | awk '($$1 == "$(DB)"){printf("%s", $$4);}')
-DB_PASS = $(shell ssh $(DATASRC) cat /opt/dinfo/etc/dbs.conf | awk '($$1 == "$(DB)"){printf("%s", $$5);}')
-
 COMPOSE ?= docker-compose.yml
+SSH_AUTH_SOCK_FILE ?= $(SSH_AUTH_SOCK)
+SSH_AUTH_SOCK_DIR = $(dir $(SSH_AUTH_SOCK_FILE))
+
+export
 
 kb:
 	ln -s $(KBPATH) $@
@@ -28,13 +15,19 @@ kb:
 build:
 	docker-compose -f $(COMPOSE) build
 
+kup:
+	KILLPID=1 docker-compose -f $(COMPOSE) up -d
+
 up: dcup
 
 dcup:
 	docker-compose -f $(COMPOSE) up -d 
 
 kc:
-	docker-compose -profile kc -f $(COMPOSE) up -d
+	docker-compose --profile kc -f $(COMPOSE) up -d keycloak
+
+# atela:
+# 	docker-compose --profile atela -f $(COMPOSE) up -d atela
 
 down: 
 	docker-compose -f $(COMPOSE) down
@@ -67,30 +60,26 @@ migrate: dcup
 # 	make up
 
 # -------------------------------------------------- restore legacy DB from prod
+# since we moved this to the external script we keep them just as a reminder
 
 .PHONY: restore restore_legacy restore_cv restore_cadi restore_dinfo restore_accred
 
 restore: restore_legacy
 
-restore_legacy:  restore_cv restore_cadi restore_dinfo restore_accred
+restore_legacy:
+	./bin/restoredb.sh all
 
-FIXDB = sed 's/0000-00-00 00:00:00/NULL/g' | sed -E "s/(datetime|timestamp) NOT NULL DEFAULT 'NULL'/\1 NOT NULL/g" | sed -E "s/DEFAULT *'NULL'/DEFAULT NULL/g"
 restore_accred:
-	$(eval DB := accred)
-	$(eval TABLES := $(ACCRED_TABLES))
-	$(MYSQLDUMP) | gunzip | $(FIXDB) | $(MYSQLDB)
+	./bin/restoredb.sh accred
+
+restore_bottin:
+	./bin/restoredb.sh bottin	
 
 restore_cadi:
-	$(eval DB := cadi)
-	$(eval TABLES := $(CADI_TABLES))
-	$(MYSQLDUMP) | gunzip | $(FIXDB) | $(MYSQLDB)
+	./bin/restoredb.sh cadi
 
 restore_cv:
-	$(eval DB := cv)
-	$(eval TABLES := $(CV_TABLES))
-	$(MYSQLDUMP) | gunzip | $(FIXDB) | $(MYSQLDB)
+	./bin/restoredb.sh cv
 
 restore_dinfo:
-	$(eval DB := dinfo)
-	$(eval TABLES := $(DINFO_TABLES))
-	$(MYSQLDUMP) | gunzip | $(FIXDB) | $(MYSQLDB)
+	./bin/restoredb.sh dinfo

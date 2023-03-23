@@ -9,7 +9,7 @@ class Legacy::Accreditation < Legacy::BaseAccred
   self.table_name = 'accreds'
   self.primary_key = nil
   belongs_to :unit, :class_name => "Unit", :foreign_key => "unitid"
-  belongs_to :person, :class_name => "Person", :foreign_key => "sciper"
+  belongs_to :person, :class_name => "Person", :foreign_key => "persid"
   belongs_to :position, :class_name => "Position", :foreign_key => "posid"
   belongs_to :status, :class_name => "Status", :foreign_key => "statusid"
 
@@ -17,8 +17,12 @@ class Legacy::Accreditation < Legacy::BaseAccred
     self.unitid
   end
 
+  def sciper
+    self.persid
+  end
+
   def display
-    Legacy::AccredDisplay.where(sciper: self.sciper, unit: self.unit_id).first
+    Legacy::AccredDisplay.where(sciper: self.persid, unit: self.unit_id).first
   end
 
   def can_edit_profile?
@@ -32,7 +36,7 @@ class Legacy::Accreditation < Legacy::BaseAccred
   end
 
   def function(lang='en')
-    self.position["label#{lang}"]
+    self.position.nil? ? nil : self.position["label#{lang}"]
   end
 
   def class_delegate
@@ -42,6 +46,17 @@ class Legacy::Accreditation < Legacy::BaseAccred
 
   def preference
     Legacy::AccredPref.where(sciper: self.persid, unit: self.unit_id)
+  end
+
+  def address
+    @address ||= Legacy::PostalAddress.where(sciper: self.persid, unite: self.unit_id).first
+  end
+
+  def atela
+    self.person.atela_accreds.key?(unit_id) ? 
+
+  def phones
+    self.person.phones
   end
 end
 
