@@ -5,7 +5,7 @@ module ElementsHelper
     indx = @ee_collapse_indx
     if block_given?
       content = capture(&block)
-      options = content_or_options_with_block
+      options = content_or_options_with_block || {}
     else
       content = content_or_options_with_block
     end

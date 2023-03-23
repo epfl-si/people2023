@@ -1,45 +1,114 @@
 class Legacy::Cv < Legacy::BaseCv
-  self.table_name = 'cv'
+  self.table_name = 'common'
   self.primary_key = 'sciper'
-  has_many :accreditations, :class_name => "Accreditation", :foreign_key => "sciper", :inverse_of => "cv"
+
+  has_one :naming, :class_name => "Naming", :foreign_key => "sciper"
+
+  # personal data is stored in two parts. 
+  # This class is the language independent (common) part
+  # TranslatedCv is instead the language-dependent part
+  has_many :translations, :class_name => "TranslatedCv", :foreign_key => "sciper"
+
   has_many :educations,     :class_name => "Education", :foreign_key => "sciper"
   has_many :experiences,    :class_name => "Experience", :foreign_key => "sciper"
   has_many :publications,   :class_name => "Publication", :foreign_key => "sciper"
-  has_many :social_ids, -> { order 'ordre' }, :class_name => "SocialId", :foreign_key => "sciper"
-
+  has_many :social_ids,     :class_name => "SocialId", :foreign_key => "sciper"
   has_many :teaching_activities, :class_name => "TeachingActivity", :foreign_key => "sciper"
-  has_one  :data, :class_name => "ExtraData", :foreign_key => "sciper"
 
-  # has_many relation does not work because not on the same DB :_(
-  # has_many :units, :class_name => "Dinfo::Unit", through: :accreditations
-  def units
-    self.accreditations.map{|a| a.unit }
+  # This stuff we get from atela ?
+  has_one  :email, :class_name => "Email", :foreign_key => "sciper"
+
+  # has_one  :account, :class_name => "Account", :foreign_key => "sciper"
+  # has_many :offices, :class_name => "Office", :foreign_key => "sciper"
+  # has_many :postal_addresses, :class_name => "PostalAddress", :foreign_key => "sciper"
+  # has_many :accreds, :class_name => "Accreditation", :foreign_key => "persid"
+  # This does not work. I think because it is missing the class for Accreditation and looks for the accreds table in dinfo db
+  # has_and_belongs_to_many :units, :join_table => "accreds", :foreign_key => "persid", :association_foreign_key => "unitid"
+  # strftime is needed because we had to cast all datetimes into strings
+  # explicit table name needed because col name is duplicate hence query ambiguous
+
+  has_many :active_accreds, -> { where("#{Legacy::Accreditation.table_name}.finval IS NULL OR #{Legacy::Accreditation.table_name}.finval > ?", Date.today.strftime).order(:ordre).joins(:position) }, :class_name => "Accreditation", :foreign_key => "persid"
+  has_many :active_units, :class_name => "Unit", :through => :active_accreds, :foreign_key => "persid", :source => "unit"
+  has_many :active_positions, :class_name => "Position", :through => :active_accreds, :foreign_key => "persid", :source => "position"
+
+  has_many :policies, :class_name => "Policy", :foreign_key => "persid"
+  has_many :active_policies, -> { where("#{Legacy::Policy.table_name}.finval IS NULL OR #{Legacy::Policy.table_name}.finval > ?", Date.today.strftime) }, :class_name => "Policy", :foreign_key => "persid"
+  has_many :active_properties, :class_name => "Property", :through => :active_policies, :foreign_key => "persid", :source => "property"
+
+  has_many :accred_prefs, :class_name => "AccredPref", :foreign_key => "sciper"
+
+  def atela
+    @atela ||= Atela::Person.new(self.sciper)
   end
 
-  def visible_units
-    self.accreditations.select{|a| a.accred_show == "1"}.map{|a| a.unit }
+  def username
+    atela.username
   end
 
-  def visible_social_ids
-    # needs to be sorted after db fetch because most of the "ordre" entries
-    # are NULL. Therefore, we mostly sort by the default order
-    self.social_ids.where("id_show = '1' AND content IS NOT NULL").sort{|a,b| a.order <=> b.order}
+  def phone
+    atela.phone
   end
 
-  def show_photo?
-    self.photo_show == "1"
+  def room 
+    atela.room
   end
 
-  def method_missing(method_id, *arguments, &block)
-    if self.data.respond_to?(method_id)
-      self.data.send(method_id, *arguments)
-    else
-      super
-    end
+  def affiliations
+    active_accreds.map{|a| Legacy::Affiliation.new(a, atela.accreds[a.unitid], sex)}
   end
 
-  # TODO
-  def photo_url
-    "https://via.placeholder.com/400"
+  def display_name
+    self.naming.display_name
   end
+
+  def sex
+    self.naming.sexe
+  end
+
+  def birthday
+    self.naming.date_naiss
+  end
+
+  def email_address
+    self.email.addrlog
+  end
+
+  def show_birthday?
+    self.datenaiss_show == "1"
+  end
+
+  # def phones
+  #   if aa=atela_accreds
+  #     aa.values.map{|v| v["phones"]}
+  #       .flatten.sort{|a,b| a["phone_order"] <=> b["phone_order"]}
+  #       .map{|p| p["phone_nb"]}
+  #   else
+  #     self.offices.map{|p| [p["telephone1"], p["telephone2"]]}.flatten.compact
+  #   end
+  # end
+
+  # def main_phone
+  #   self.phones.first
+  # end
+
+  def can_edit_profile?
+    self.active_accreds.any? {|a| a.can_edit_profile?} ||
+      self.active_properties.map{|p| p.id}.include?(7) ||
+        self.active_positions.map{|p| p.labelfr}.include?('Professeur honoraire')
+  end
+
+  # forward all getters that cannot be found to self.data (common table)
+  # def method_missing(method_id, *arguments, &block)
+  #   if self.data 
+  #     if self.data.respond_to?(method_id)
+  #       self.data.send(method_id, *arguments)
+  #     else
+  #       super
+  #     end
+  #   else
+  #     # in some case self.data is nil (e.g. when the user haven't edited his page yet)
+  #     nil
+  #   end
+  # end
+
 end

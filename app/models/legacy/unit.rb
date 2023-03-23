@@ -13,4 +13,8 @@ class Legacy::Unit < Legacy::BaseDinfo
 			self.libelle
 		end
 	end
+
+	def url?
+		self.url.nil? or self.url.empty? ? false : true
+	end
 end

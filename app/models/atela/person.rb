@@ -1,144 +1,3 @@
-# {
-#   "adr": "EPFL SI IDEV-FSD $ INN 012 (Bâtiment INN) $ Station 14 $ CH-1015 Lausanne",
-#   "cmd_id": 796438,
-#   "line1": "EPFL SI IDEV-FSD",
-#   "line2": "INN 012 (Bâtiment INN)",
-#   "line3": "Station 14",
-#   "line4": "CH-1015 Lausanne",
-#   "line5": "",
-#   "pays": "Suisse",
-#   "pers_id": 121769,
-#   "room_unit_id": "",
-#   "type": "custom",
-#   "type_related_id": "0",
-#   "unit_id": 13030,
-#   "valid_from": "2021-08-11 09:13:17",
-#   "valid_to": "",
-#   "value": "EPFL SI IDEV-FSD $ INN 012 (Bâtiment INN) $ Station 14 $ CH-1015 Lausanne"
-# },
-class AtelaAddress
-  attr_reader :lines, :country, :category
-  def initialize(data)
-    @full = data['adr']
-    @lines = [data['line1'], data['line2'], data['line3'], data['line4'], data['line5']]
-    @category = data['type']
-    @country = data['pays']
-    @unit_id = data['unit_id']
-    @valid_from = datetime_or_nil(data['valid_from'])
-    @valid_to = datetime_or_nil(data['valid_to'])
-  end
-  def full
-    @full || @lines.join(" $ ")
-  end
-  # don't use valid? to avoid confusion with AR::valid? that implies validation
-  def enabled?
-    return false if @valid_from.nil?
-    t = DateTime.now()
-    if @valid_to.nil?
-      return @valid_from < t
-    else
-      return (@valid_from < t) && (t < @valid_to)
-    end
-  end
- private
-  def datetime_or_nil(s)
-    begin
-      d = DateTime.strptime(s, '%Y-%m-%d %H:%M:%S')
-    rescue
-      d = nil
-    end
-    d
-  end
-
-end
-
-#   "default_phone": {
-#     "from_default": "true",
-#     "other_room": "",
-#     "outgoing_right": "NATIONAL",
-#     "phone_hidden": "0",
-#     "phone_id": 3971,
-#     "phone_nb": "+41216937526",
-#     "phone_order": 1,
-#     "phone_type": "FIXE_OFFICE",
-#     "room_id": ""
-#   },
-class AtelaPhone
-  attr_reader :id, :order, :category, :number
-  def initialize(data)
-    @id = data['phone_id']
-    @number = data['phone_nb']
-    @order = data['phone_order'].to_i
-    @category = data['phone_type']
-    @hidden = data['phone_hidden'].to_i != 0
-  end
-  def hidden?
-    @hidden
-  end
-end
-
-# {
-#   "description": "Bureau",
-#   "from_default": "true",
-#   "room_abr": "INN 014",
-#   "room_hidden": "0",
-#   "room_id": 31559,
-#   "room_order": 1,
-#   "type": "internal"
-# },
-class AtelaRoom
-  attr_reader :id, :description, :abbr, :order, :category
-  def initialize(data)
-    @id = data['room_id']
-    @description = data['description']
-    @abbr = data['room_abbr']
-    @order = data['room_order'].to_i
-    @category = data['type']
-    @hidden = data['room_hidden'].to_i != 0
-  end
-  def hidden?
-    @hidden
-  end
-end
-
-# {
-#   "address": {
-#     "line1": "EPFL VPO-SI ISAS-FSD",
-#     "line2": "INN 012 (Bâtiment INN)",
-#     "line3": "Station 14",
-#     "line4": "CH-1015 Lausanne",
-#     "line5": ""
-#   },
-#   "id": 13030,
-#   "label": "Développement Full-Stack",
-#   "level": 4,
-#   "sigle": "ISAS-FSD"
-# }
-class AtelaUnit
-  attr_reader :id, :label, :level, :name
-  def initialize(data)
-    p data
-    @id = data['id']
-    @label = data['label']
-    @level = data['level']
-    @name = data['sigle']
-  end
-end
-
-class AtelaAccred
-  attr_reader :address, :hierarchy, :order, :phones
-
-  def initialize(data)
-    @unit = nil
-    @address = AtelaAddress.new(data['address'])
-    @hierarchy = data['hierarchie']
-    @order = data['ordre']
-  end
-  def unit=(u)
-    @unit = u
-  end
-end
-
 # person: {
 #   "firstname": "Giovanni",
 #   "name": "Cangiani",
@@ -149,7 +8,7 @@ end
 # units: [{...},{...}],
 # default_phone: {...},        -> @phone
 # default_room: {...},         -> @room
-class AtelaPerson
+class Atela::Person
   attr_reader :first_name, :family_name, :sciper, :username, :phone, :room, :accreds
   MAX_ATTEMPTS = 1
   def initialize(sciper)
@@ -198,23 +57,23 @@ class AtelaPerson
     if d = data['units']
       # units = d.map{|u| AtelaUnit.new(d)}.map{|u| [u.id, u]}.to_h
       d.each do |ud|
-        u = AtelaUnit.new(ud)
+        u = Atela::Unit.new(ud)
         units[u.id] = u
       end
     end
     if d = data['accreds']
       d.each do |k,v|
-        a = AtelaAccred.new(v)
+        a = Atela::Accred.new(v)
         u = units[k]
         a.unit=u unless u.nil?
         @accreds[k] = a
       end
     end
     if d = data['default_phone']
-      @phone = AtelaPhone.new(d)
+      @phone = Atela::Phone.new(d)
     end
     if d = data['default_room']
-      @room = AtelaRoom.new(d)
+      @room = Atela::Room.new(d)
     end
   end
 end

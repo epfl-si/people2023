@@ -1,129 +1,49 @@
-<% @person.active_accreds.each_with_index do |accred, indx| %>
-  <%= ee_collapse(accred_function_with_class_delegate(accred)) do -%>
-    <% if accred.address %>
-    <% phoneclass="col-md-6" %> 
-    <div class="col-md-6">
-      <p itemprop="location" itemscope="" itemtype="http://schema.org/Place">
-        <span itemprop="address"><%= accred.address %></span>
-      </p>
-    </div>
+<% @person.affiliations.each_with_index do |affiliation, indx| %>
+  <%= ee_collapse(position_with_class_delegate(affiliation)) do -%>
+    <div class="row">
+    <% if affiliation.address %>
+      <% phoneclass="col-md-6" %> 
+      <div class="col-md-6">
+        <p itemprop="location" itemscope="" itemtype="http://schema.org/Place">
+          <span itemprop="address">
+            <strong><%= affiliation.hierarchy %></strong><br/>
+            <%= address(affiliation.address) %>
+          </span>
+        </p>
+      </div>
     <% else %>
-    <% phoneclass="col-md-12" %> 
+      <% phoneclass="col-md-12" %> 
     <% end %>
     <div class="<%= phoneclass %>">
-      <% accred.phones.each do |phone| %>
-        <%= phone_link(phone) unless phone.phone_hidden %>
+      <% affiliation.phones.select{|p| !p.hidden?}.each do |phone| %>
+        <span class="people-btn">
+          <%= phone_link(phone.number) %>
+        </span>
       <% end %>
+      <br/>
+      <% unless affiliation.room.nil? %>
+      <small>
+        <%= t("office") %>:
+        <%= link_to(affiliation.room.label, affiliation.room.url) %>
+      </small>
+      <br/>
+      <% end %>
+      <small>
+        <%= hierarchy_links affiliation.hierarchy %>
+      </small>
     </div>
+    </div>
+    <% if affiliation.unit.url? %>
+    <div class="row">
+    <div class="col-sm-12">
+    <p>
+      <span class="sr-only">Web site: </span>
+      <small>
+        <%= t "website" %>: <%= link_to affiliation.unit.url, affiliation.unit.url %>
+      </small>
+    </p>
+    </div>
+    </div>
+    <% end %>
   <% end -%>
 <% end %>
-
-
-      <div class="<TMPL_VAR NAME=phone_div_class>">
-        <p>
-          <TMPL_LOOP NAME=phones><!-- MERGE PHONES AND OFFICES LOOPS -->
-            <TMPL_UNLESS NAME=phone_hidden>
-            <TMPL_IF NAME=phone_link>
-            <span class="people-btn"><TMPL_VAR NAME=phone_link></span><br>
-            </TMPL_IF>
-            </TMPL_UNLESS>
-          </TMPL_LOOP>
-
-          <TMPL_IF NAME=rooms>
-          <TMPL_LOOP NAME=rooms>
-            <TMPL_UNLESS NAME=room_hidden>
-            <small>
-              <TMPL_VAR NAME=room_label>: 
-              <a href="https://plan.epfl.ch?room==<TMPL_VAR NAME=room_ref>">
-                <TMPL_VAR NAME=room_name>
-              </a>
-            </small>
-            <br>
-            </TMPL_UNLESS>
-          </TMPL_LOOP>
-          </TMPL_IF>
-
-          <TMPL_IF NAME=room>
-          <small>
-            <TMPL_VAR NAME=room_label>: 
-            <a href="https://plan.epfl.ch?room==<TMPL_VAR NAME=room_ref>">
-              <TMPL_VAR NAME=room>
-            </a>
-          </small>
-          <br>
-          </TMPL_IF>
-
-          <TMPL_LOOP NAME=path_loop>
-            <small>
-              <a href="<TMPL_VAR NAME=search_path>">
-                <TMPL_VAR NAME=path>
-              </a>
-              <TMPL_UNLESS NAME=last>></TMPL_UNLESS>
-            </small>
-          </TMPL_LOOP>                                    
-        </p>
-      </div>
-
-      <TMPL_IF NAME=uniturl>
-      <div class="col-sm-12">
-        <p>
-          <span class="sr-only">Web site: </span>
-          <small>
-            <TMPL_VAR NAME=unit_web_label>: 
-            <a href="<TMPL_VAR NAME=uniturl>">
-              <TMPL_VAR NAME=uniturl>
-            </a>
-          </small>
-        </p>
-      </div>
-      </TMPL_IF>
-
-    </div><!-- ROW 5 -->
-  </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="collapse collapse-item collapse-item-desktop" id="collapse-3">
-    <div class="col-md-7">
-      <p itemprop="location" itemscope itemtype="http://schema.org/Place">
-        <strong itemprop="name">EPFL PRES</strong><br />
-        <span itemprop="address">
-          CE 3 316 (Centre Est)<br />
-          Station 1<br />
-          CH-1015 Lausanne
-        </span>
-      </p>
-    </div>
-    <div class="col-md-5">
-      <a href="tel:+41 21 666 77 88" class="btn btn-sm btn-secondary mb-2">+41 21 666 77 88</a><br />
-      <svg class="icon" aria-hidden="true">
-        <use xlink:href="#icon-twitter"></use>
-      </svg>
-      <a href="#">Website</a><br />
-      <svg class="icon" aria-hidden="true">
-        <use xlink:href="#icon-twitter"></use>
-      </svg>
-      <a href="#">Directory</a><br />
-      <svg class="icon" aria-hidden="true">
-        <use xlink:href="#icon-twitter"></use>
-      </svg>
-      <a href="#">CE 3 316</a>
-    </div>
-  </div>
-</div>
-
-

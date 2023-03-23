@@ -1,13 +1,13 @@
-<% if @cv.titre_show %>
+<% if !@cv.nil? and @cv.titre_show %>
 <h4><%= @cv.titre %></h4>
 <% end %>
 <p>
-  <% if @person.email %>
-  <%= link_to	@person.email_address, "mailto:#{@person.email_address}", class: "btn btn-sm btn-primary" %>
+  <% if @email %>
+  <%= link_to	@email.address, "mailto:#{@email.address}", class: "btn btn-sm btn-primary" %>
   <% end %>
 
-  <% if @person.main_phone %>
-  <span class="people-btn"><%= phone_link(@person.main_phone) %></span>
+  <% if @person.phone %>
+  <span class="people-btn"><%= phone_link(@person.phone.number) %></span>
   <% end %>
 
   <% if @person.can_edit_profile? %>
@@ -26,7 +26,7 @@
 
 <% if @person.show_birthday? %>
 <p>
-	<%= t 'birthday' %> : <%= @person.date_naiss %>
+	<%= t 'birthday' %> : <%= @person.birthday %>
 </p>
 <% end %>
 <% end %><!-- edit_profile -->
