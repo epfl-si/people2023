@@ -1,4 +1,4 @@
-<% if !@cv.nil? and @cv.titre_show %>
+<% if @editable && @tcv.show_title? %>
 <h4><%= @cv.titre %></h4>
 <% end %>
 <p>
@@ -7,26 +7,26 @@
   <% end %>
 
   <% if @person.phone %>
-  <span class="people-btn"><%= phone_link(@person.phone.number) %></span>
+  <%= phone_link(@person.phone.number, class: "btn btn-sm btn-secondary") %>
   <% end %>
 
-  <% if @person.can_edit_profile? %>
-  <% if @person.web_perso %>
-    <%= link_to(@person.web_perso, @person.web_perso, class: "btn btn-sm btn-secondary") %>
+  <% if @editable %>
+  <% if @cv.web_perso %>
+    <%= link_to(@cv.web_perso, @cv.web_perso, class: "btn btn-sm btn-secondary") %>
   <% end %>
   <% end %><!-- edit_profile -->
 </p>
 
-<% if @person.can_edit_profile? %>
-<% if @person.nat %>
+<% if @editable %>
+<% unless @cv.nat.nil? or @cv.nat.empty? %>
 <p>
-	<%= t 'nationality' %> : <%= @person.nat %>
+	<%= t 'nationality' %> : <%= @cv.nat %>
 </p>
 <% end %>
 
-<% if @person.show_birthday? %>
+<% if @cv.show_birthday? %>
 <p>
-	<%= t 'birthday' %> : <%= @person.birthday %>
+	<%= t 'birthday' %> : <%= @cv.birthday %>
 </p>
 <% end %>
 <% end %><!-- edit_profile -->

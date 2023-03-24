@@ -15,9 +15,6 @@ class Legacy::Cv < Legacy::BaseCv
   has_many :social_ids,     :class_name => "SocialId", :foreign_key => "sciper"
   has_many :teaching_activities, :class_name => "TeachingActivity", :foreign_key => "sciper"
 
-  # This stuff we get from atela ?
-  has_one  :email, :class_name => "Email", :foreign_key => "sciper"
-
   # has_one  :account, :class_name => "Account", :foreign_key => "sciper"
   # has_many :offices, :class_name => "Office", :foreign_key => "sciper"
   # has_many :postal_addresses, :class_name => "PostalAddress", :foreign_key => "sciper"
@@ -27,74 +24,28 @@ class Legacy::Cv < Legacy::BaseCv
   # strftime is needed because we had to cast all datetimes into strings
   # explicit table name needed because col name is duplicate hence query ambiguous
 
-  has_many :active_accreds, -> { where("#{Legacy::Accreditation.table_name}.finval IS NULL OR #{Legacy::Accreditation.table_name}.finval > ?", Date.today.strftime).order(:ordre).joins(:position) }, :class_name => "Accreditation", :foreign_key => "persid"
-  has_many :active_units, :class_name => "Unit", :through => :active_accreds, :foreign_key => "persid", :source => "unit"
-  has_many :active_positions, :class_name => "Position", :through => :active_accreds, :foreign_key => "persid", :source => "position"
-
-  has_many :policies, :class_name => "Policy", :foreign_key => "persid"
-  has_many :active_policies, -> { where("#{Legacy::Policy.table_name}.finval IS NULL OR #{Legacy::Policy.table_name}.finval > ?", Date.today.strftime) }, :class_name => "Policy", :foreign_key => "persid"
-  has_many :active_properties, :class_name => "Property", :through => :active_policies, :foreign_key => "persid", :source => "property"
-
-  has_many :accred_prefs, :class_name => "AccredPref", :foreign_key => "sciper"
-
-  def atela
-    @atela ||= Atela::Person.new(self.sciper)
-  end
-
-  def username
-    atela.username
-  end
-
-  def phone
-    atela.phone
-  end
-
-  def room 
-    atela.room
-  end
-
-  def affiliations
-    active_accreds.map{|a| Legacy::Affiliation.new(a, atela.accreds[a.unitid], sex)}
-  end
-
-  def display_name
-    self.naming.display_name
-  end
-
-  def sex
-    self.naming.sexe
-  end
-
-  def birthday
-    self.naming.date_naiss
-  end
-
-  def email_address
-    self.email.addrlog
+  # TODO
+  def photo_url
+    "https://via.placeholder.com/400"
   end
 
   def show_birthday?
     self.datenaiss_show == "1"
   end
 
-  # def phones
-  #   if aa=atela_accreds
-  #     aa.values.map{|v| v["phones"]}
-  #       .flatten.sort{|a,b| a["phone_order"] <=> b["phone_order"]}
-  #       .map{|p| p["phone_nb"]}
-  #   else
-  #     self.offices.map{|p| [p["telephone1"], p["telephone2"]]}.flatten.compact
-  #   end
-  # end
+  def show_photo?
+    self.photo_show == "1"
+  end
 
-  # def main_phone
-  #   self.phones.first
-  # end
+  # TODO use default language config for fallback
+  def translated_part(lang)
+    self.translations.where(cvlang: lang).first || self.translated_part.where(cvlang: self.defaultcv).first
+  end
 
-  def can_edit_profile?
-    self.active_accreds.any? {|a| a.can_edit_profile?} ||
-      self.active_properties.map{|p| p.id}.include?(7) ||
-        self.active_positions.map{|p| p.labelfr}.include?('Professeur honoraire')
+  def visible_social_ids
+    # needs to be sorted after db fetch because most of the "ordre" entries
+    # are NULL. Therefore, we mostly sort by the default order
+    self.social_ids.where("id_show = '1' AND content IS NOT NULL").sort{|a,b| a.order <=> b.order}
   end
 
   # forward all getters that cannot be found to self.data (common table)

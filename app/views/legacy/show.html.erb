@@ -21,7 +21,7 @@
                   <%= render 'contact' %>
                   <!-- CONTACT -->
                 </div>
-                <% if @cv %>
+                <% if @editable %>
                 <div class="col-sm-12 ">
                   <div style="width: 80%; padding-top: 15px;">
                     <%= render 'research_ids' %>
@@ -52,6 +52,7 @@
       </div><!-- ROW1 -->
     </div><!-- container -->
 
+    <% if @editable %>
     <div class="container">
       <div class="position-relative cmt-5 mt30"><!-- position-relative cmt-5 mt30 -->
         <div class="people-contents mt30"><!-- people-contents -->
@@ -68,6 +69,7 @@
         </div><!-- people-contents -->
       </div>
     </div><!-- container -->
+    <% end %>
   </main>
 </div>
 

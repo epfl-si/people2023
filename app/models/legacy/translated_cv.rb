@@ -12,22 +12,9 @@ class Legacy::TranslatedCv < Legacy::BaseCv
 
   # has_many relation does not work because not on the same DB :_(
   # has_many :units, :class_name => "Dinfo::Unit", through: :accreditations
-  def units
-    self.accreditations.map{|a| a.unit }
-  end
 
-  def visible_units
-    self.accreditations.select{|a| a.accred_show == "1"}.map{|a| a.unit }
-  end
-
-  def visible_social_ids
-    # needs to be sorted after db fetch because most of the "ordre" entries
-    # are NULL. Therefore, we mostly sort by the default order
-    self.social_ids.where("id_show = '1' AND content IS NOT NULL").sort{|a,b| a.order <=> b.order}
-  end
-
-  def show_photo?
-    self.photo_show == "1"
+  def show_title?
+    self.titre_show == "1"
   end
 
   def method_missing(method_id, *arguments, &block)
@@ -38,8 +25,4 @@ class Legacy::TranslatedCv < Legacy::BaseCv
     end
   end
 
-  # TODO
-  def photo_url
-    "https://via.placeholder.com/400"
-  end
 end

@@ -11,7 +11,12 @@ class LegacyController < ApplicationController
       @email = Legacy::Email.where("addrlog = ? OR addrlog LIKE ?", "#{sciper_or_name}@epfl.ch", "#{sciper_or_name}@epfl.%").first
       @sciper=@email.sciper unless @email.nil?
     end
-    @person = Legacy::Cv.find(@sciper)
+    @person = Legacy::Person.find(@sciper)
+    @editable = @person.can_edit_profile?
+    if @editable
+      @cv = Legacy::Cv.find(@sciper)
+      @tcv = @cv.translated_part(I18n.locale)
+    end
   end
 
   # def show
