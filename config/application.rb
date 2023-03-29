@@ -35,5 +35,10 @@ module HelloRails
     #   g.helper false
     #   g.assets false
     # end
+
+    # Custom app configs: everything from ENV with defaults
+    config.prefer_atela = ENV.fetch("PREFER_ATELA", false)
+    config.intranet_re = Regexp.new(ENV.fetch("INTRANET_RE", '^128\.17[89]'))
+
   end
 end
