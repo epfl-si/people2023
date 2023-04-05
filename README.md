@@ -86,6 +86,12 @@ We get it, you love Ruby and you hate JavaScript (otherwise, maybe you should ha
 
 React being what it is though, JSX and all, it demands some kind of build process. This starter kit uses [esbuild](https://esbuild.github.io/) which is a fast and modern replacement for Webpack. The `jsbundling-rails` gem integrates esbuild into the run-time part of Rails' asset pipeline in a way that is easy to reason about (with cache keys in URLs and all).
 
+### EPFL Elements
+The standard layout of EPFL. References:
+ * [repository](https://github.com/epfl-si/elements)
+ * [documentation](https://epfl-si.github.io/elements/#/)
+ * [styleguide](https://github.com/epfl-si/epfl-theme-elements)
+
 ### OpenID Connect
 
 It has become fashionable to split Web apps between front-end and back-end, if only to provide division of labor for those who hate JavaScript (see above). Security can become a problem at the interface between both.
@@ -110,3 +116,4 @@ Once your front-end is authenticated, it will want to talk to the back-end. Grap
 In the out-of-the-box configuration for this demo app, _only_ the `/graphql` URL is protected by OpenID access control. We posit that this is, in fact, a reasonable approach to security; and that you might want to consider designing your app so that there is no need for additional protection.
 
 GraphQL provides for all your data access and mutation needs. It is pretty straightforward to enforce the security policy (for both access control and auditing) by checking for a so-called OpenID “claim” that is mapped to a role directly from within the relevant GraphQL controllers. The rest of your app should not disclose information (except information intended for public use) at any other endpoint; nor should it permit any mutation except, over GraphQL. In other words, you should refrain from using “traditional” Rails controllers and Web templates (either Web 1.0-style with `application/x-www-form-urlencoded` POSTs; or “modern” REST-style APIs with other HTTP verbs), except to serve “traditional” Web content (using HTTP GET) to unauthenticated users (such as search engines). Examples of concerns that you will be able to disregard entirely are [XSRF tokens](https://guides.rubyonrails.org/action_controller_overview.html#request-forgery-protection) (and the secret management headaches they entail when [deploying a load-balanced Rails app](https://www.jetbrains.com/help/ruby/capistrano.html#credentials)), [ad-hoc signaling and UX](https://www.rubyguides.com/2019/11/rails-flash-messages/), and more.
+
