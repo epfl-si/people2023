@@ -6,9 +6,6 @@ SSH_AUTH_SOCK_DIR = $(dir $(SSH_AUTH_SOCK_FILE))
 
 export
 
-kb:
-	ln -s $(KBPATH) $@
-
 # ---------------------------------------------------------------- run local app
 .PHONY: build up dcup down logs console dbconsole setup
 
