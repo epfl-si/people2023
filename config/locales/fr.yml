@@ -4,3 +4,15 @@ fr:
   nationality: "Nationalit&eacute;"
   class_delegate: "D&eacute;l&eacute;gu&eacute; de classe"
   office: "Local"
+  student:
+    female: Etudiante
+    male: Etudiant
+  admin_data:
+    title: "Données administratives"
+    sciper: "Numéro SCIPER"
+    sap: "Matricule SAP"
+    username: "Username"
+    gid: "GID"
+    uid: "UID"
+    home: "Home directory"
+    shell: "Shell"

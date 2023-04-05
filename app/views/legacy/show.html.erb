@@ -45,6 +45,15 @@
 
             <div class="col-md-6"><!-- ROW2,R -->
               <%= render 'accreds' %>
+              <p class="mt-4"><!-- ADMIN DATA -->
+                <small>
+                  <a href="<%= url_for :params=>{:format => :vcard} %>">
+                    <span style="vertical-align: text-bottom;">vCard</span>
+                  </a>
+                </small>
+                <br>
+              </p>
+              <%= render 'admin_data' if current_user %>
               <%= render 'admin_data' %>
             </div><!-- ROW2,R -->
           </div><!-- ROW2 -->

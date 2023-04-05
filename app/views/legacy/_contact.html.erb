@@ -1,5 +1,5 @@
 <% if @editable && @tcv.show_title? %>
-<h4><%= @cv.titre %></h4>
+<h4><%= @tcv.title %></h4>
 <% end %>
 <p>
   <% if @email %>
@@ -26,7 +26,7 @@
 
 <% if @cv.show_birthday? %>
 <p>
-	<%= t 'birthday' %> : <%= @cv.birthday %>
+	<%= t 'birthday' %> : <%= @person.birthday %>
 </p>
 <% end %>
 <% end %><!-- edit_profile -->

@@ -5,13 +5,39 @@
 #   # belongs_to :cv,   :class_name => "Cv", :foreign_key => "sciper"
 # end
 
+# accred part of getAllAccredsSolved
+#       accreds.*,
+#       statuses.`name`         AS statusname,
+#       statuses.labelfr        AS statuslabelfr,
+#       statuses.labelen        AS statuslabelen,
+#       classes.`name`          AS classname,
+#       classes.labelfr         AS classlabelfr,
+#       classes.labelen         AS classlabelen,
+#       positions.labelfr       AS poslabelfr,
+#       positions.labelen       AS poslabelen,
+#       positions.labelxx       AS poslabelxx
+
+# persid  unitid statusid classid posid
+# 363674  50133         5      21  NULL
+# 363674  50133         5      15  NULL
+# 363674  50099         5      21  NULL
+# 363674  50099         5      15  NULL
+# 363674  50099         5      15  NULL
+# 363674  50133         5      15  NULL
+
+
 class Legacy::Accreditation < Legacy::BaseAccred
   self.table_name = 'accreds'
-  self.primary_key = nil
+  self.primary_key = 'persid'
   belongs_to :unit, :class_name => "Unit", :foreign_key => "unitid"
-  belongs_to :cv, :class_name => "Cv", :foreign_key => "persid"
+  belongs_to :person, :class_name => "Person", :foreign_key => "persid"
   belongs_to :position, :class_name => "Position", :foreign_key => "posid"
   belongs_to :status, :class_name => "Status", :foreign_key => "statusid"
+  belongs_to :kind, :class_name => "PersonClass", :foreign_key => "classid"
+
+  # def dinfos
+  #   @dinfos ||= PostalAddress.join()
+  #   @pa ||= PostalAddress.where(sciper: self.persid, unit: )
 
   def unit_id
     self.unitid
@@ -19,10 +45,6 @@ class Legacy::Accreditation < Legacy::BaseAccred
 
   def sciper
     self.persid
-  end
-
-  def display
-    Legacy::AccredDisplay.where(sciper: self.persid, unit: self.unit_id).first
   end
 
   def can_edit_profile?
@@ -35,8 +57,14 @@ class Legacy::Accreditation < Legacy::BaseAccred
     [4, 5, 6].include?(self.statusid)
   end
 
-  def function(lang='en')
-    self.position.nil? ? nil : self.position["label#{lang}"]
+  def function(lang=I18n.locale)
+    gender = self.person.gender
+    tablegender = gender == "female" ? "xx" : lang
+    if self.position.nil?
+      I18n.t "student.#{gender}"
+    else
+      self.position["label#{tablegender}"]
+    end
   end
 
   def class_delegate

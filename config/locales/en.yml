@@ -35,3 +35,15 @@ en:
   nationality: "Nationality"
   class_delegate: "Class delegate"
   office: "Office"
+  student:
+    female: Student
+    male: Student
+  admin_data:
+    title: "Admin data"
+    sciper: "SCIPER Number"
+    sap: "SAP ID"
+    username: "Username"
+    gid: "GID"
+    uid: "UID"
+    home: "Home directory"
+    shell: "Shell"

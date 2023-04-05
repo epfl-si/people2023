@@ -17,6 +17,10 @@ class Legacy::TranslatedCv < Legacy::BaseCv
     self.titre_show == "1"
   end
 
+  def title
+    self.titre
+  end
+
   def method_missing(method_id, *arguments, &block)
     if self.data.respond_to?(method_id)
       self.data.send(method_id, *arguments)

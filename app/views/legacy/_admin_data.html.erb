@@ -1,12 +1,4 @@
 <p class="mt-4"><!-- ADMIN DATA -->
-  <small>
-    <a href="<TMPL_VAR NAME=path_info>/vcard" >
-      <span style="vertical-align: text-bottom;">vCard</span>
-    </a>
-  </small>
-  <br>
-
-  <TMPL_IF NAME=user><!-- user -->
   
   <TMPL_IF NAME=showadmindata><!-- showadmindata -->
   <!--    ALL UNITS       -->
@@ -27,30 +19,25 @@
   <br>
 
   <!--    ACCREDS -->
-  <button class="collapse-title collapse-title-desktop collapsed" type="button" data-toggle="collapse"  onclick="toggleVis('admin-data')">
-    <span style="font-size:small; font-weight: normal;">
-      <TMPL_VAR NAME=admin_data_label>
-    </span>
-  </button>
-  <div id="admin-data" style="display: none;">
+  <%= ee_collapse(t("admin_data.title")) do -%>
     <dl class="definition-list definition-list-grid data-list" style="font-size: smaller;">
-      <dt><TMPL_VAR NAME=admindata_label_sciper></dt>
-      <dd><TMPL_VAR NAME=sciper></dd>
-      <dt><TMPL_VAR NAME=admindata_label_sap></dt>
-      <dd><TMPL_VAR NAME=numsap></dd>
-      <dt>Username</dt>
-      <dd><TMPL_VAR NAME=user></dd>
-      <dt>GID</dt>
-      <dd><TMPL_VAR NAME=gid></dd>
-      <dt>UID</dt>
-      <dd><TMPL_VAR NAME=uid></dd>
-      <dt>Home directory</dt>
-      <dd><TMPL_VAR NAME=home></dd>
-      <dt>Shell</dt>
-      <dd><TMPL_VAR NAME=shell></dd>
+      <dt><%= t "admin_data.sciper" %></dt>
+      <dd><%= @sciper %></dd>
+      <dt><%= t "admin_data.sap" %></dt>
+      <dd><%= @person.account.sap_id %></dd>
+      <dt><%= t "admin_data.username"%></dt>
+      <dd><%= @person.account.user %></dd>
+      <dt><%= t "admin_data.gid" %></dt>
+      <dd><%= @person.account.gid %></dd>
+      <dt><%= t "admin_data.uid" %></dt>
+      <dd><%= @person.account.uid %></dd>
+      <dt><%= t "admin_data.home" %></dt>
+      <dd><%= @person.account.home %></dd>
+      <dt><%= t "admin_data.shell" %></dt>
+      <dd><%= @person.account.shell %></dd>
     </dl>
-  </div>
-
+ <% end -%>
+ <% if false # TODO! %>
   <TMPL_ELSE><!-- user -->
   <small>
     <svg class="icon" aria-hidden="true">
@@ -60,5 +47,5 @@
       <TMPL_VAR NAME=admin_data_label>
     </a>
   </small>
-  </TMPL_IF><!-- user -->
+ <% end %>
 </p><!-- ADMIN DATA -->
