@@ -12,39 +12,24 @@
             <div class="col-md-6"><!-- ROW2,L -->
               <div class="row"> <!-- ROW3 -->
                 <div class="col-sm-12 col-md-6 mb-3">
-                  <%= render 'photo' %>
+                  <%= render 'legacy/s0/photo' %>
                 </div>
               </div> <!-- ROW3 -->
 
               <div class="row"> <!-- ROW4 -->
                 <div class="col-sm-12">
-                  <%= render 'contact' %>
+                  <%= render 'legacy/s0/contact' %>
                   <!-- CONTACT -->
                 </div>
                 <% if @editable %>
-                <div class="col-sm-12 ">
-                  <div style="width: 80%; padding-top: 15px;">
-                    <%= render 'research_ids' %>
-                  </div>
-                </div>
+                  <%= render 'legacy/s0/research_ids' %>
+                  <%= render 'legacy/s0/kboxes' %>
                 <% end %>
-                <!--
-                <TMPL_IF NAME=contact>
-                  <TMPL_IF NAME=edit_profile>
-                    <div class="col-sm-12 my-3">
-                      <TMPL_LOOP NAME=contact>
-                        <h5><TMPL_VAR NAME=boxlabel></h5>
-                        <TMPL_VAR NAME=boxcontent>
-                      </TMPL_LOOP>
-                    </div>
-                  </TMPL_IF>
-                </TMPL_IF>
-                -->
               </div> <!-- ROW4 -->
             </div> <!-- ROW2,L -->
 
             <div class="col-md-6"><!-- ROW2,R -->
-              <%= render 'accreds' %>
+              <%= render 'legacy/s0/accreds' %>
               <p class="mt-4"><!-- ADMIN DATA -->
                 <small>
                   <a href="<%= url_for :params=>{:format => :vcard} %>">
@@ -53,8 +38,7 @@
                 </small>
                 <br>
               </p>
-              <%= render 'admin_data' if current_user %>
-              <%= render 'admin_data' %>
+              <%= render 'legacy/s0/admin_data' if current_user or true %>
             </div><!-- ROW2,R -->
           </div><!-- ROW2 -->
         </div><!-- ROW1,single -->
@@ -66,14 +50,14 @@
       <div class="position-relative cmt-5 mt30"><!-- position-relative cmt-5 mt30 -->
         <div class="people-contents mt30"><!-- people-contents -->
           <TMPL_IF NAME=edit_profile><!-- if edit profile -->
-            <%= render 'menubar' %>
-            <%= render 'boxes' %>
-            <%= render 'publications' %>
-            <%= render 'research' %>
+            <%= render 'legacy/s0/menubar' %>
+            <%= render 'legacy/s0/biography' %>
+            <%= render 'legacy/s0/publications' %>
+            <%= render 'legacy/s0/research' %>
           </TMPL_IF><!-- if edit profile -->
 
           <TMPL_IF NAME=teachingact><!-- TEACHING ACT -->
-            <%= render 'teaching' %>
+            <%= render 'legacy/s0/teaching' %>
           </TMPL_IF><!-- TEACHING ACT -->
         </div><!-- people-contents -->
       </div>
@@ -82,4 +66,4 @@
   </main>
 </div>
 
-<%= render 'all_units' %>
+<%= render 'legacy/s0/all_units' %>

@@ -12,7 +12,10 @@ Rails.application.routes.draw do
   post "/graphql", to: "graphql#execute"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  get '/cv/:sciper_or_name', to: 'legacy#show', 
+  get '/cv0/:sciper_or_name', to: 'legacy#show0',
+      :constraints => { :sciper_or_name => /([0-9]{6})|([a-z]+\.[a-z]+)/ }
+
+  get '/cv1/:sciper_or_name', to: 'legacy#show1',
       :constraints => { :sciper_or_name => /([0-9]{6})|([a-z]+\.[a-z]+)/ }
 
   # Defines the root path route ("/")

@@ -30,14 +30,6 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
-  birthday: "Birthday"
-  nationality: "Nationality"
-  class_delegate: "Class delegate"
-  office: "Office"
-  student:
-    female: Student
-    male: Student
   admin_data:
     title: "Admin data"
     sciper: "SCIPER Number"
@@ -47,3 +39,16 @@ en:
     uid: "UID"
     home: "Home directory"
     shell: "Shell"
+  awards: "Awards"
+  biography: "Biography"
+  birthday: "Birthday"
+  class_delegate: "Class delegate"
+  hello: "Hello world"
+  infoscience_publications: "Infoscience Publications"
+  nationality: "Nationality"
+  office: "Office"
+  publications: "Publications"
+  student:
+    female: Student
+    male: Student
+  work_experience: "Work Experience"

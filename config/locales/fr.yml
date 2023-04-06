@@ -1,12 +1,4 @@
 fr:
-  hello: "Bonjour"
-  birthday: "Date de naissance"
-  nationality: "Nationalit&eacute;"
-  class_delegate: "D&eacute;l&eacute;gu&eacute; de classe"
-  office: "Local"
-  student:
-    female: Etudiante
-    male: Etudiant
   admin_data:
     title: "Données administratives"
     sciper: "Numéro SCIPER"
@@ -16,3 +8,16 @@ fr:
     uid: "UID"
     home: "Home directory"
     shell: "Shell"
+  awards: "Awards"
+  birthday: "Date de naissance"
+  biography: "Biographie"
+  class_delegate: "D&eacute;l&eacute;gu&eacute; de classe"
+  hello: "Bonjour"
+  infoscience_publications: "Publications Infoscience"
+  nationality: "Nationalit&eacute;"
+  office: "Local"
+  publications: "Publications"
+  student:
+    female: Etudiante
+    male: Etudiant
+  work_experience: "Parcours professionnel"

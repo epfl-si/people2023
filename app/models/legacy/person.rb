@@ -27,8 +27,6 @@ class Legacy::Person < Legacy::BaseDinfo
   has_many :accred_prefs, :class_name => "AccredPref", :foreign_key => "sciper"
   has_one :account, :class_name => "Account", :foreign_key => "sciper"
 
-
-
   # default_scope { includes(:author).order('created_at ASC') }
 
   def affiliations
@@ -99,6 +97,28 @@ class Legacy::Person < Legacy::BaseDinfo
       self.active_properties.map{|p| p.id}.include?(7) ||
         self.active_positions.map{|p| p.labelfr}.include?('Professeur honoraire')
   end
+
+  # $is_achieving_professor = $ENV{FORCE_ACHIEVING_PROF} || does_have_right_anywhere($self, $sciper, 'AAR.report.control');
+  # sub does_have_right_anywhere {
+  #   my ($self, $sciper, $right_name) = @_;
+  #   return unless $sciper;
+
+  #   see common-libs/accred-libs/Accred/Rights.pm
+  #   my $rup = $self->{Rights}->getRights (
+  #     persid => $sciper,
+  #     rightid => $right_name,
+  #   );
+  #   if (keys %{$rup}) {
+  #     return 1;
+  #   } else {
+  #     return 0;
+  #   }
+  # }  
+  # TODO implement Rights model
+  def is_achieving_professor?
+    true
+  end
+
 
   def display_name
     @display_name ||= "#{self.prenom_usuel || self.prenom_acc} #{self.nom_usuel || self.nom_acc}"

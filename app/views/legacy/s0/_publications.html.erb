@@ -1,23 +1,57 @@
-<TMPL_IF NAME=publications><!-- PUBLICATIONS    -->
+<% if @cv.any_publication? %>
 <div class="people-contents mt30">
+
+<h2><%= t "publications" %></h2>
+
+<% if @cv.infosciences.present? %>
+  <div class="col-mt5">
+    <h3 id="publications-info"><%= t "infoscience_publications" %></h3>
+    <% @cv.infosciences.each do |p| %>
+      <div class="list-group-item list-group-item-borderless">
+        <div class="row">
+          <div class="col-md-12">
+            <h4><%= p.label %></h4>
+            <div><%= p.content %></div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<% if @cv.publications.visible.present? %>
+  <div class="col-mt5">
+    <h3 id="publications-people" class="mt30"><%= t "people_publications" %></h3>
+    <div class="list-group collapse collapse-partial" id="publications-struct-text" aria-expanded="false">
+      <table class="table">
+        <% @cv.publications.visible.each do |p| %>
+          <tr>
+            <td><b><%= p.author %></b><br><%= p.journal %></td>
+            <td style="vertical-align: top;">
+              <% if p.url.present? %>
+                <%= link_to p.title, p.url %>
+              <% else %>
+                <%= p.url %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+<% end %>
+
+
+</div>
+<% end %>
+
+<TMPLIF NAME=publications><!-- PUBLICATIONS    -->
   <h2 id="publications">Publications</h2>
 
   <TMPL_IF NAME=pubinfoscience><!-- INFOSCIENCE   -->
-  <div class="col-mt5">
-    <h3 id="publications-info">
-      <TMPL_VAR NAME=publicationsInfo_label>
-    </h3>
     <div class="list-group collapse collapse-partial" id="publications-info-text" aria-expanded="false">
       <TMPL_LOOP NAME=pubinfoscience>
         <TMPL_IF NAME=boxcontent>
-        <div class="list-group-item list-group-item-borderless">
-          <div class="row">
-            <div class="col-md-12">
-              <h4><TMPL_VAR NAME=boxlabel></h4>
-              <TMPL_VAR NAME=boxcontent>
-            </div>
-          </div>
-        </div>
         </TMPL_IF>
       </TMPL_LOOP><!-- pubinfoscience -->
     </div>
