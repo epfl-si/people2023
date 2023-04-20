@@ -3,11 +3,26 @@ class Legacy::Infoscience < Legacy::BaseCv
   self.primary_key = 'sciper'
   belongs_to :cv, :class_name => "Cv", :foreign_key => "sciper"
 
+  URL_RE = %r{(http|https)://infoscience\-exports\.epfl\.ch/\d+/(\?ln=(fr|en))?}
+
   default_scope do
-    where(position: 'P')
+    where(position: 'P', sys: 'I')
   end
 
+  def url
+    URL_RE.match?(src) ? src : nil
+  end
+
+  def html_content
+    return nil if url.nil?
+    @html_content ||= InfoscienceGetter.call(url)
+  end
+
+# content of the box is just the infoscience url and must validate the following regex
+# return 1 if $src =~ m#^(http|https)://infoscience\-exports\.epfl\.ch/\d+/(\?ln=(fr|en))?#;
+
 end
+
 
 # if ($box->{sys} eq 'I' && $box->{src} =~ m#$URLinfoscience#i) {
 #   if ($USE_INFOCACHE) {

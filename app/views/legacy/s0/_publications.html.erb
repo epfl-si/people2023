@@ -1,7 +1,6 @@
 <% if @cv.any_publication? %>
-<div class="people-contents mt30">
-
-<h2><%= t "publications" %></h2>
+<section id='publications_section'>
+<h2 class="section_title"><%= t "publications" %></h2>
 
 <% if @cv.infosciences.present? %>
   <div class="col-mt5">
@@ -11,7 +10,7 @@
         <div class="row">
           <div class="col-md-12">
             <h4><%= p.label %></h4>
-            <div><%= p.content %></div>
+            <div><%= p.html_content.html_safe %></div>
           </div>
         </div>
       </div>
@@ -42,67 +41,5 @@
 <% end %>
 
 
-</div>
 <% end %>
-
-<TMPLIF NAME=publications><!-- PUBLICATIONS    -->
-  <h2 id="publications">Publications</h2>
-
-  <TMPL_IF NAME=pubinfoscience><!-- INFOSCIENCE   -->
-    <div class="list-group collapse collapse-partial" id="publications-info-text" aria-expanded="false">
-      <TMPL_LOOP NAME=pubinfoscience>
-        <TMPL_IF NAME=boxcontent>
-        </TMPL_IF>
-      </TMPL_LOOP><!-- pubinfoscience -->
-    </div>
-    <button class="collapsed btn btn-light btn-block btn-sm mt-3" data-toggle="collapse" data-target="#publications-info-text" aria-hidden="true" aria-controls="publications-info-text" onclick="toggleCollapse('publications-info');">
-      <div id="publications-info-more_less">Show more</div>
-    </button>
-  </div>
-  </TMPL_IF><!-- INFOSCIENCE      -->
-
-  <TMPL_IF NAME=pubPeopleLoop><!-- PUB PEOPLE     -->
-  <div class="col-mt5">
-    <h3 id="publications-people" class="mt30">
-      <TMPL_VAR NAME=publicationsPeopleStruct_label>
-    </h3>
-    <div class="list-group collapse collapse-partial" id="publications-struct-text" aria-expanded="false">
-      <table class="table">
-        <TMPL_LOOP NAME=pubPeopleLoop>
-          <tr>
-            <td><b><TMPL_VAR NAME=auteurspub></b><br><TMPL_VAR NAME=revuepub></td>
-            <td style="vertical-align: top;"><TMPL_IF NAME=urlpub><a href="<TMPL_VAR NAME=urlpub>"></TMPL_IF><TMPL_VAR NAME=titrepub><TMPL_IF NAME=urlpub></a></TMPL_IF></td>
-          </tr>
-        </TMPL_LOOP>
-      </table>
-    </div>
-    <button class="collapsed btn btn-light btn-block btn-sm mt-3" data-toggle="collapse" data-target="#publications-struct-text" aria-hidden="true" aria-controls="publications-struct-text" onclick="toggleCollapse('publications-struct');">
-      <div id="publications-struct-more_less">Show more</div>
-    </button>                       
-  </div>
-  </TMPL_IF><!-- PUB PEOPLE       -->
-
-  <TMPL_IF NAME=pubFreeBoxesLoop><!-- PUB FREE BOXES      -->
-  <div class="col-mt5">
-    <h3 id="publications-people" class="mt30">
-      <TMPL_VAR NAME=publicationsPeopleFree_label>
-    </h3>
-    <div class="collapse collapse-partial" id="publications-free-text" aria-expanded="false">
-      <TMPL_LOOP NAME=pubFreeBoxesLoop>
-        <TMPL_IF NAME=boxcontent>
-          <h4 style="margin-top: 20px;">
-            <TMPL_VAR NAME=boxlabel>
-          </h4>
-          <TMPL_VAR NAME=boxcontent>
-        </TMPL_IF>
-      </TMPL_LOOP>
-    </div>
-    <button class="collapsed btn btn-light btn-block btn-sm mt-3" data-toggle="collapse" data-target="#publications-free-text" aria-hidden="true" aria-controls="publications-free-text" onclick="toggleCollapse('publications-free');">
-      <div id="publications-free-more_less">Show more</div>
-    </button>                       
-  </div>
-  </TMPL_IF><!-- PUB FREE BOXES      -->
-</div>
-</TMPL_IF><!--  PUBLICATIONS    -->
-                                                  
 
