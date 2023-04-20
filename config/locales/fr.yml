@@ -9,14 +9,20 @@ fr:
     home: "Home directory"
     shell: "Shell"
   awards: "Awards"
+  bachelor_teaching_title: "Enseignement"
   birthday: "Date de naissance"
   biography: "Biographie"
   class_delegate: "D&eacute;l&eacute;gu&eacute; de classe"
+  courses_title: "Cours"
+  current_phd_students_title: "Doctorants"
+  doctoral_teaching_title: "Enseignement & Phd"
   hello: "Bonjour"
   infoscience_publications: "Publications Infoscience"
   nationality: "Nationalit&eacute;"
   office: "Local"
+  past_phd_students_title: "A dirig&eacute; les th&egrave;ses EPFL de"
   publications: "Publications"
+  teaching: "Enseignement"
   student:
     female: Etudiante
     male: Etudiant

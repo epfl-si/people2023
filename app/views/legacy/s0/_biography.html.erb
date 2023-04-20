@@ -5,12 +5,16 @@
 </div>
 <% end %>                
 
-<h2><%= t "biography" %></h2>
+<section id='biography_section'>
+<h2 class="section_title"><%= t "biography" %></h2>
 <% unless @boxes['B'].empty? %>
 <div class="cmt-5 mt30" id="bio-block">
   <% @boxes['B'].each do |b| %>
+    <% c = sanitize(b.content) %>
+    <% if c.present? %>
     <h5><%= b.label %></h5>
-    <div><%= sanitize(b.content) %></div>
+    <div><%= c %></div>
+    <% end %>
   <% end %>
 </div>
 <% end %>
@@ -71,3 +75,4 @@
   </div>
 </div>
 <% end %>
+</section>

@@ -40,15 +40,21 @@ en:
     home: "Home directory"
     shell: "Shell"
   awards: "Awards"
+  bachelor_teaching_title: "Teaching"
   biography: "Biography"
   birthday: "Birthday"
   class_delegate: "Class delegate"
+  courses_title: "Courses"
+  current_phd_students_title: "PhD Students"
+  doctoral_teaching_title: "Teaching & PhD"
   hello: "Hello world"
   infoscience_publications: "Infoscience Publications"
   nationality: "Nationality"
   office: "Office"
+  past_phd_students_title: "Past EPFL PhD Students"
   publications: "Publications"
   student:
     female: Student
     male: Student
+  teaching: "Teaching"
   work_experience: "Work Experience"

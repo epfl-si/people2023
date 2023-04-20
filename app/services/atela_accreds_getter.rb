@@ -7,7 +7,7 @@ class AtelaAccredsGetter < ApplicationService
 
   def fetch
     # curl -H 'Authorization: People.key ATELA_KEY' https://atela.epfl.ch/cgi-bin/atela-backend/getPerson/121769
-    url="#{ENV.fetch("ATELA_BACKEND_URL")}/getPerson/#{@id}"
+    url=Rails.configuration.atela_backend_url + "/getPerson/#{@id}"
     key="People.key " + ENV.fetch("ATELA_KEY")
     uri=URI.parse(url)
     opts={:use_ssl => true, :read_timeout => 100}

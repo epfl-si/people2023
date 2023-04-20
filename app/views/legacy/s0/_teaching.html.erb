@@ -1,95 +1,70 @@
-<div class="people-contents mt30">
-  <h3 id="teaching-and-phd">
-    <TMPL_VAR NAME=teachingandphd_label>
-  </h3>
-  <div class="people-contents">
-    <TMPL_IF NAME=primarysections><!--      TEACHING SECT   -->
-    <div class="cmt-5">
-      <h4><TMPL_VAR NAME=teaching_label></h4>
-      <p>
-        <TMPL_VAR NAME=primarysections>
-      </p>
-      <TMPL_IF NAME=secondarysections>
-      <p>
-        <TMPL_VAR NAME=secondarysections>
-      </p>
-      </TMPL_IF>
-    </div>
-    </TMPL_IF><!--  TEACHING SECT   -->
+<section id='teaching_section' class="people-contents">
+<h2 class="section_title"><%= t "teaching" %></h2>
 
-    <TMPL_IF NAME=progsdoct><!--    PROG DOCT       -->
-    <div class="cmt-5">
-      <h4>
-        <TMPL_VAR NAME=phdprogs_label>
-      </h4>
-      <TMPL_LOOP NAME=progsdoct>
-        <p><TMPL_VAR NAME=label></p>
-      </TMPL_LOOP>
-    </div>
-    </TMPL_IF>
+  <% if @ta.bachelor_section_names.present? %>
+  <div class="cmt-5">
+    <%= content_tag(:h4, t("bachelor_teaching_title")) %>
+    <%= content_tag(:p, @ta.bachelor_section_names.join(", ")) %>
   </div>
+  <% end %>
+  <% if @ta.doctoral_teaching.present? %>
+  <div class="cmt-5">
+    <%= content_tag(:h4, t("doctoral_teaching_title")) %>
+    <% @ta.doctoral_section_names.each do |s| %>
+      <%= content_tag(:p, s) %>
+    <% end %>
+  </div>
+  <% end %>
 
-  <TMPL_IF NAME=anydoctact>
+  <% if @ta.has_phds? %>
   <div class="cmt-5 mt30">
-    <TMPL_IF NAME=crtdoctact>
-    <h4>
-      <TMPL_VAR NAME=phdstuds_label>
-    </h4>
-    <TMPL_LOOP NAME=crtdoctact>
-      <a href="/<TMPL_VAR NAME=mailId>"><TMPL_VAR NAME=name></a>, 
-    </TMPL_LOOP>
-    </TMPL_IF><!-- crtdoctact -->
+    <% if @ta.current_phds.present? %>
+    <h4><%= t "current_phd_students_title" %></h4>
+    <p>
+    <% @ta.current_phds.each do |s| %>
+    <%= link_to(s.full_name, person_path(s.sciper)) %>
+    <% end %>
+    </p>
+    <% end %>
 
-    <TMPL_IF NAME=pastdoctact>
-    <h4 class="cmt-5 mt30">
-      <TMPL_VAR NAME=pastphdstuds_label>
-    </h4>
-    <TMPL_LOOP NAME=pastdoctact>
-      <TMPL_IF NAME=thesisNumber>
-      <a href="http://dx.doi.org/10.5075/epfl-thesis-<TMPL_VAR NAME=thesisNumber>">
-        <TMPL_VAR NAME=name>
-      </a>
-      <TMPL_ELSE>
-      <TMPL_VAR NAME=name> 
-      </TMPL_IF>,
-    </TMPL_LOOP>
-    </TMPL_IF><!-- pastdoctact -->
+    <% if @ta.past_phds.present? %>
+    <h4><%= t "past_phd_students_title" %></h4>
+    <p>
+    <% @ta.past_phds.each do |s| %>
+    <%= link_to(s.full_name, person_path(s.sciper)) %>
+    <% end %>
+    </p>
+    <% end %>
   </div>
-  </TMPL_IF><!-- anydoctact -->
+  <% end %>
 
-  <TMPL_IF NAME=teachingloop>
-  <div class="col-md12">
-    <TMPL_LOOP NAME=teachingloop>
-      <h2 style="margin-top: 20px;">
-        <TMPL_VAR NAME=boxlabel>
-      </h2>
-      <TMPL_VAR NAME=boxcontent>
-    </TMPL_LOOP>
-  </div>
-  </TMPL_IF><!-- teachingloop -->
-
-  <TMPL_IF NAME=courses>
-  <div class="cmt-5 mt30">
-    <h3 id="courses">
-      <TMPL_VAR NAME=courses_label>
-    </h3>
-    <div class="list-group" id="cours-text" >
-      <TMPL_LOOP NAME=courses>
-        <div class="course_box">
-          <h4>
-            <TMPL_IF NAME=X_URL>
-            <a href="<TMPL_VAR NAME="X_URL">">
-              <TMPL_VAR NAME="X_MATIERE">
-            </a> 
-            <TMPL_ELSE>
-            <TMPL_VAR NAME="X_MATIERE">
-            </TMPL_IF>
-          </h4>
-          <TMPL_VAR NAME="X_OBJECTIFS">
-          <hr class="dotted">
-        </div>
-      </TMPL_LOOP><!-- courses -->
+  <% if @ta.courses.present? %>
+    <h4><%= t "courses_title" %></h4>
+    <div class="list-group" id="cours-text" %>
+      <% @ta.courses.each do |c| %>
+      <div class="course_box">
+        <% if c.url.present? %>
+        <h4><%= link_to(c.title, c.url) %></h4>
+        <% else %>
+        <h4><%= c.title %></h4>
+        <% end %>
+        <p><%= c.description %></p>
+        <hr class="dotted" />
+      </div>
+      <% end %>
     </div>
-  </div>
-  </TMPL_IF><!-- courses -->
+  <% end %>
+
+<% unless @boxes['T'].empty? %>
+<div class="cmt-5 mt30" id="bio-block">
+  <% @boxes['T'].each do |b| %>
+    <% c = sanitize(b.content) %>
+    <% if c.present? %>
+    <h5><%= b.label %></h5>
+    <div><%= c %></div>
+    <% end %>
+  <% end %>
 </div>
+<% end %>
+
+</section>

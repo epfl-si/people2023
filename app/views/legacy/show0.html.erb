@@ -47,21 +47,12 @@
 
     <% if @editable %>
     <div class="container">
-      <div class="position-relative cmt-5 mt30"><!-- position-relative cmt-5 mt30 -->
-        <div class="people-contents mt30"><!-- people-contents -->
-          <TMPL_IF NAME=edit_profile><!-- if edit profile -->
-            <%= render 'legacy/s0/menubar' %>
-            <%= render 'legacy/s0/biography' %>
-            <%= render 'legacy/s0/publications' %>
-            <%= render 'legacy/s0/research' %>
-          </TMPL_IF><!-- if edit profile -->
+      <%= render 'legacy/s0/biography' %>
+      <%= render 'legacy/s0/publications' %>
+      <%= render 'legacy/s0/research' %>
 
-          <TMPL_IF NAME=teachingact><!-- TEACHING ACT -->
-            <%= render 'legacy/s0/teaching' %>
-          </TMPL_IF><!-- TEACHING ACT -->
-        </div><!-- people-contents -->
-      </div>
-    </div><!-- container -->
+      <%= render 'legacy/s0/teaching' if @ta.present? %>
+    </div>
     <% end %>
   </main>
 </div>

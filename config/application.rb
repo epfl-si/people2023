@@ -37,7 +37,11 @@ module HelloRails
     # end
 
     # Custom app configs: everything from ENV with defaults
+    # Use as Rails.configuration.key
     config.prefer_atela = ENV.fetch("PREFER_ATELA", false)
+    config.atela_backend_url = ENV.fetch("ATELA_BACKEND_URL", 'https://atela.epfl.ch/cgi-bin/atela-backend')
+    config.isa_url = ENV.fetch("ISA_URL", 'https://isa.epfl.ch/services')
+    config.isa_no_check_ssl = ENV.fetch("ISA_NO_CHECK_SSL", false)
     config.intranet_re = Regexp.new(ENV.fetch("INTRANET_RE", '^128\.17[89]'))
 
   end

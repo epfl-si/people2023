@@ -3,6 +3,7 @@ class LegacyController < ApplicationController
 
   def show0
     common_show_data
+    @page_title = "EPFL - #{@person.display_name}"
   end
 
  private
@@ -21,6 +22,11 @@ class LegacyController < ApplicationController
     # @cv = Legacy::Cv.find(@sciper)
     @cv = Legacy::Cv.where(sciper: @sciper).first
     @editable = !@cv.nil? && @person.can_edit_profile?
+    if @person.possibly_teacher?
+      @ta = Isa::Teaching.new(@sciper)
+    else
+      @ta = nil
+    end
     if @editable
       @tcv = @cv.translated_part(I18n.locale)
       bb = @cv.translated_boxes(I18n.locale).order(:position, :ordre)

@@ -119,6 +119,10 @@ class Legacy::Person < Legacy::BaseDinfo
     true
   end
 
+  # TODO: see if it is possible to guess if person could be a teacher in order to avoid useless requests to ISA
+  def possibly_teacher?
+    true
+  end
 
   def display_name
     @display_name ||= "#{self.prenom_usuel || self.prenom_acc} #{self.nom_usuel || self.nom_acc}"
