@@ -1,4 +1,6 @@
 FROM ruby:3.0-bullseye
+ARG RAILS_ENV=production
+ENV RAILS_ENV $RAILS_ENV
 
 ENV APP_HOME /app
 RUN mkdir $APP_HOME

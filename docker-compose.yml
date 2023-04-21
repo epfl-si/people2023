@@ -70,7 +70,11 @@ services:
     networks:
       - default
   webapp:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - RAILS_ENV=development
     env_file: .env
 
 volumes:
