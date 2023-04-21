@@ -1,45 +1,56 @@
 <% if @cv.any_publication? %>
-<section id='publications_section'>
+<section id='publication_section'>
 <h2 class="section_title"><%= t "publications" %></h2>
 
-<% if @cv.infosciences.present? %>
-  <div class="col-mt5">
-    <h3 id="publications-info"><%= t "infoscience_publications" %></h3>
-    <% @cv.infosciences.each do |p| %>
-      <div class="list-group-item list-group-item-borderless">
-        <div class="row">
-          <div class="col-md-12">
-            <h4><%= p.label %></h4>
-            <div><%= p.html_content.html_safe %></div>
-          </div>
-        </div>
-      </div>
-    <% end %>
-  </div>
+<% if @cv.infosciences.visible.present? %>
+<div class="col-mt5" id="publications-infoscience">
+	<h3><%= t "infoscience_publications" %></h3>
+	<% @cv.infosciences.visible.each do |p| %>
+		<div class="list-group-item list-group-item-borderless"><div class="row"><div class="col-md-12"%>
+			<h4><%= p.label %></h4>
+			<div><%= p.html_content.html_safe %></div>
+		</div></div></div>
+	<% end %>
+</div>
 <% end %>
 
 <% if @cv.publications.visible.present? %>
-  <div class="col-mt5">
-    <h3 id="publications-people" class="mt30"><%= t "people_publications" %></h3>
-    <div class="list-group collapse collapse-partial" id="publications-struct-text" aria-expanded="false">
-      <table class="table">
-        <% @cv.publications.visible.each do |p| %>
-          <tr>
-            <td><b><%= p.author %></b><br><%= p.journal %></td>
-            <td style="vertical-align: top;">
-              <% if p.url.present? %>
-                <%= link_to p.title, p.url %>
-              <% else %>
-                <%= p.url %>
-              <% end %>
-            </td>
-          </tr>
-        <% end %>
-      </table>
-    </div>
-  </div>
+<div class="col-mt5" id="publications-people">
+	<h3><%= t "people_publications" %></h3>
+	<div class="list-group">
+		<table class="table">
+		<% @cv.publications.visible.each do |p| %>
+			<tr>
+			<td>
+				<b><%= p.author %></b>
+				<br>
+				<%= p.journal %>
+			</td>
+			<td style="vertical-align: top;">
+				<% if p.url.present? %>
+					<%= link_to p.title, p.url %>
+				<% else %>
+					<%= p.url %>
+				<% end %>
+			</td>
+			</tr>
+		<% end %>
+		</table>
+	</div>
+</div>
 <% end %>
 
-
+<% if @cv.publication_boxes.visible.present? %>
+<div class="col-mt5" id="publications-free">
+	<h3><%= t "free_publications" %></h3>
+	<% @cv.publication_boxes.visible.each do |b| %>
+	  <% if b.label.present? %>
+	  <h4><%= b.label %></h4>
+	  <% end %>
+	  <div><%= b.content %></div>
+	<% end %>
+</div>
 <% end %>
 
+</section>
+<% end %>

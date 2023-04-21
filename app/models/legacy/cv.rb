@@ -20,6 +20,8 @@ class Legacy::Cv < Legacy::BaseCv
 
   has_many :boxes, :class_name => "Box", :foreign_key => "sciper"
 
+  has_many :publication_boxes, :class_name => "PublicationBox", :foreign_key => "sciper"
+
   # has_one  :account, :class_name => "Account", :foreign_key => "sciper"
   # has_many :offices, :class_name => "Office", :foreign_key => "sciper"
   # has_many :postal_addresses, :class_name => "PostalAddress", :foreign_key => "sciper"

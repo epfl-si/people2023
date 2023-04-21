@@ -5,6 +5,8 @@ class Legacy::Infoscience < Legacy::BaseCv
 
   URL_RE = %r{(http|https)://infoscience\-exports\.epfl\.ch/\d+/(\?ln=(fr|en))?}
 
+  scope  :visible, -> { where(box_show: '1') }
+
   default_scope do
     where(position: 'P', sys: 'I')
   end
@@ -15,7 +17,7 @@ class Legacy::Infoscience < Legacy::BaseCv
 
   def html_content
     return nil if url.nil?
-    @html_content ||= InfoscienceGetter.call(url)
+    @html_content ||= InfoscienceGetter.call(url).to_s.force_encoding("UTF-8")
   end
 
 # content of the box is just the infoscience url and must validate the following regex

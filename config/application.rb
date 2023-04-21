@@ -8,6 +8,9 @@ Bundler.require(*Rails.groups)
 
 module HelloRails
   class Application < Rails::Application
+
+    config.encoding = "utf-8"
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 
