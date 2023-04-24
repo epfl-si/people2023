@@ -17,7 +17,11 @@ class Legacy::Infoscience < Legacy::BaseCv
 
   def html_content
     return nil if url.nil?
-    @html_content ||= InfoscienceGetter.call(url).to_s.force_encoding("UTF-8")
+    @html_content ||= begin
+      c = InfoscienceGetter.call(url)
+      c = c.to_s.force_encoding("UTF-8") unless c.nil? or c.encoding == "UTF-8"
+      c
+    end
   end
 
 # content of the box is just the infoscience url and must validate the following regex

@@ -1,9 +1,13 @@
 class LegacyController < ApplicationController
   layout "legacy"
 
+
   def show0
     common_show_data
-    @page_title = "EPFL - #{@person.display_name}"
+  end
+
+  def show
+    common_show_data
   end
 
  private
@@ -18,6 +22,7 @@ class LegacyController < ApplicationController
       @sciper=@email.sciper unless @email.nil?
     end
     @person = Legacy::Person.find(@sciper)
+    @page_title = "EPFL - #{@person.display_name}"
     # @cv can be nil because not everybody can edit his personal page
     # @cv = Legacy::Cv.find(@sciper)
     @cv = Legacy::Cv.where(sciper: @sciper).first
@@ -29,7 +34,7 @@ class LegacyController < ApplicationController
     end
     if @editable
       @tcv = @cv.translated_part(I18n.locale)
-      bb = @cv.translated_boxes(I18n.locale).order(:position, :ordre)
+      bb = @tcv.boxes.order(:position, :ordre)
       @boxes={}
       ['K', 'B', 'P', 'R', 'T'].each do |k|
         @boxes[k] = bb.select{|b| b.position == k}

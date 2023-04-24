@@ -3,6 +3,7 @@ class Legacy::Box < Legacy::BaseCv
   self.primary_key = 'sciper'
   belongs_to :cv, :class_name => "Cv", :foreign_key => "sciper"
 
-  scope  :visible, -> { where(box_show: '1') }
+  scope :visible, -> { where(box_show: '1') }
+  scope :with_content, -> { where("content IS NOT NULL and content <> ''")}
 
 end

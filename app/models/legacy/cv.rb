@@ -16,11 +16,6 @@ class Legacy::Cv < Legacy::BaseCv
   has_many :publications,   :class_name => "Publication", :foreign_key => "sciper"
   has_many :social_ids,     :class_name => "SocialId", :foreign_key => "sciper"
   has_many :teaching_activities, :class_name => "TeachingActivity", :foreign_key => "sciper"
-  has_many :infosciences,   :class_name => "Infoscience", :foreign_key => "sciper"
-
-  has_many :boxes, :class_name => "Box", :foreign_key => "sciper"
-
-  has_many :publication_boxes, :class_name => "PublicationBox", :foreign_key => "sciper"
 
   # has_one  :account, :class_name => "Account", :foreign_key => "sciper"
   # has_many :offices, :class_name => "Office", :foreign_key => "sciper"
@@ -45,16 +40,12 @@ class Legacy::Cv < Legacy::BaseCv
   end
 
   def any_publication?
-    self.publications.present? or self.infosciences.present?
+    self.publications.present?
   end
 
   # TODO use default language config for fallback
   def translated_part(lang)
     self.translations.where(cvlang: lang).first || self.translated_part.where(cvlang: self.defaultcv).first
-  end
-
-  def translated_boxes(lang)
-    self.boxes.where(cvlang: lang)
   end
 
   def visible_social_ids

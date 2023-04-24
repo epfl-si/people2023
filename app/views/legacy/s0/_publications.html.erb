@@ -1,11 +1,10 @@
-<% if @cv.any_publication? %>
+<% if @cv.any_publication? or @tcv.any_publication? %>
 <section id='publication_section'>
 <h2 class="section_title"><%= t "publications" %></h2>
 
-<% if @cv.infosciences.visible.present? %>
+<% if @tcv.infosciences.visible.present? %>
 <div class="col-mt5" id="publications-infoscience">
-	<h3><%= t "infoscience_publications" %></h3>
-	<% @cv.infosciences.visible.each do |p| %>
+	<% @tcv.infosciences.visible.each do |p| %>
 		<div class="list-group-item list-group-item-borderless"><div class="row"><div class="col-md-12"%>
 			<h4><%= p.label %></h4>
 			<div><%= p.html_content.html_safe %></div>
@@ -40,10 +39,10 @@
 </div>
 <% end %>
 
-<% if @cv.publication_boxes.visible.present? %>
+<% if @tcv.publication_boxes.visible.with_content.present? %>
 <div class="col-mt5" id="publications-free">
 	<h3><%= t "free_publications" %></h3>
-	<% @cv.publication_boxes.visible.each do |b| %>
+	<% @tcv.publication_boxes.visible.with_content.each do |b| %>
 	  <% if b.label.present? %>
 	  <h4><%= b.label %></h4>
 	  <% end %>
