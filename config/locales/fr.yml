@@ -1,4 +1,9 @@
 fr:
+  action:
+    accred_full_list: "Liste complète des adresses et fonctions"
+    admin_data: "Données administratives"
+    edit_profile: "Edit profile"
+    of: "de"
   admin_data:
     title: "Données administratives"
     sciper: "Numéro SCIPER"
@@ -19,11 +24,37 @@ fr:
   hello: "Bonjour"
   infoscience_publications: "Publications Infoscience"
   nationality: "Nationalit&eacute;"
+  nav:
+    biography: "Biographie"
+    publications: "Publications"
+    teaching: "Enseignement"
+    research: "Recherche"
   office: "Local"
   past_phd_students_title: "A dirig&eacute; les th&egrave;ses EPFL de"
+  phone_type:
+    FIXE_CONF: fixe conf
+    FAX: fax
+    FIXE_OFFICE: fixe office
+    SOFT: soft
+    FIXE_LABO: fixe labo
+    OTHER: other
+    FIXE_WALL: fixe wall
+    FIXE_ANALOG: fixe analog
+    VIDEO_CONF: video conf
+    SIP_OTHER: sip other
   publications: "Publications"
-  teaching: "Enseignement"
   student:
     female: Etudiante
     male: Etudiant
+  teaching: "Enseignement"
+  title:
+    awards: "Récompenses"
+    biography: "Biographie"
+    education: "Formation"
+    expertise: "Champs de compétences"
+    of: "de"
+    publications: "Publications"
+    research: "Recherche"
+    teaching: "Enseignement"
+    work_experience: "Parcours professionnel"
   work_experience: "Parcours professionnel"

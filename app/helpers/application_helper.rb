@@ -12,7 +12,7 @@ module ApplicationHelper
     p = "+41216931111" unless /^\+[0-9]{11}$/.match?(p)
     pl = p[0..2] << sep << p[3..4] << sep << p[5..7] << sep << p[8..9] << sep << p[10..11]
     cp = @client_from_epfl ? "tel" : "callto"
-    link_to(p, "#{cp}:#{p}", opts)
+    link_to(pl.html_safe, "#{cp}:#{p}", opts)
   end
 end
 

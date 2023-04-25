@@ -23,6 +23,6 @@ class Legacy::Affiliation
     @accred.function
   end
   def room
-    @rooms.first
+    @rooms.present? ? @rooms.first : nil
   end
 end

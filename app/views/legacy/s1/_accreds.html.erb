@@ -1,0 +1,50 @@
+<% @person.affiliations.each_with_index do |affiliation, indx| %>
+  <%= ee_collapse(position_with_class_delegate(affiliation), {expanded: indx==0}) do -%>
+    <div class="row pt-2 pb-2">
+      <% if affiliation.address %>
+      <div class="col-md-5">
+        <p itemprop="location" itemscope="" itemtype="http://schema.org/Place">
+          <strong itemprop="name"><%= affiliation.hierarchy %></strong>
+          <br>
+          <span itemprop="address">
+            <%= address(affiliation.address) %>
+          </span>
+        </p>
+      </div>
+      <% end %>
+      <div class="col-md-7">
+        <p>
+          <% if affiliation.phones.present? %>
+          <% affiliation.phones.select{|p| !p.hidden?}.each_with_index do |phone, phindx| %>
+            <span class="people-btn">
+              <%= phone_link(phone.number, class: "btn btn-sm btn-secondary mb-2 align-baseline") %>
+              <!-- 
+              <small><%= t (phindx==0 ? "affiliation.main_phone_#{phone.category}" : "affiliation.phone_#{phone.category}") %></small>
+              -->
+              <% if phindx == 0 && r = affiliation.room %>
+                <small class="align-baseline ml-2">
+                  <%= r.description %>
+                  <%= link_to(r.label, r.url) %>
+                </small>
+              <% end %>
+              <br>
+            </span>
+          <% end %>
+          <% end %>
+          <small>
+            <%= t "affiliation.unit" %>: <%= hierarchy_links affiliation.hierarchy %>
+          </small>
+        </p>
+      </div>
+      <% if affiliation.unit.url? %>
+      <div class="col-sm-12">
+        <p>
+          <span class="sr-only"><%= t "website" %>: </span>
+          <%= link_to affiliation.unit.url, affiliation.unit.url %>
+        </p>
+      </div>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+

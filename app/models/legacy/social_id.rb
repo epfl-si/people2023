@@ -11,6 +11,7 @@ class Legacy::SocialId < Legacy::BaseCv
         'url' => 'https://orcid.org/XXX',
         'label' => 'ORCID',
         'order' => 0,
+        'icon' => nil,
         're' => /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}$/,
         'help' => {
           'en'  => 'https://orcid-integration.epfl.ch/',
@@ -23,6 +24,7 @@ class Legacy::SocialId < Legacy::BaseCv
         'url' => 'https://www.webofscience.com/wos/author/rid/XXX',
         'label' => 'Publons - Web of Science ID',
         'order' => 1,
+        'icon' => nil,
         're' => /^([A-Z]+-[0-9]{4}-[0-9]{4}|[0-9])+$/
       },
     # https://www.scopus.com/authid/detail.uri?authorId=57192201516
@@ -31,6 +33,7 @@ class Legacy::SocialId < Legacy::BaseCv
         'url' => 'https://www.scopus.com/authid/detail.uri?authorId=XXX',
         'label' => 'Scopus ID',
         'order' => 2,
+        'icon' => nil,
         're' => /^[0-9]+$/
       },
     'googlescholar' => {
@@ -38,6 +41,7 @@ class Legacy::SocialId < Legacy::BaseCv
         'url' => 'https://scholar.google.com/citations?user=XXX&hl=en&oi=ao',
         'label' => 'Google Scholar ID',
         'order' => 3,
+        'icon' => 'google',
         're': /^[0-9a-zA-Z.-]+$/ # TODO: check this!
       },
     'linkedin'  => {
@@ -45,6 +49,7 @@ class Legacy::SocialId < Legacy::BaseCv
         'url' => 'https://www.linkedin.com/in/XXX',
         'label' => 'Linkedin ID',
         'order' => 4,
+        'icon' => 'linkedin',
         're' => /^[a-z][a-z0-9-]+\/?$/ # TODO: check this!
       },
   }
@@ -54,6 +59,16 @@ class Legacy::SocialId < Legacy::BaseCv
       @s = RESEARCH_IDS[self.tag]
       @s['url'].sub('XXX', self.content)
     end
+  end
+
+  def icon_class
+    @s ||= RESEARCH_IDS[self.tag]
+    @s['icon'].nil? ? "" : "social-icon-#{@s['icon']}"
+  end
+
+  def icon
+    @s ||= RESEARCH_IDS[self.tag]
+    @s['icon']
   end
 
   def image

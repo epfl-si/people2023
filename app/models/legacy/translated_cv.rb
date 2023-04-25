@@ -18,7 +18,7 @@ class Legacy::TranslatedCv < Legacy::BaseCv
   end
 
   def any_publication?
-    self.infosciences.present? or self.publications_boxes.present?
+    self.infosciences.present? or self.publication_boxes.present?
   end
 
   # def method_missing(method_id, *arguments, &block)

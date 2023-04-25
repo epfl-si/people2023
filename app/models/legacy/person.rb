@@ -27,6 +27,8 @@ class Legacy::Person < Legacy::BaseDinfo
   has_many :accred_prefs, :class_name => "AccredPref", :foreign_key => "sciper"
   has_one :account, :class_name => "Account", :foreign_key => "sciper"
 
+  has_many :awards, :class_name => "Award", :foreign_key => "sciper"
+
   # default_scope { includes(:author).order('created_at ASC') }
 
   def affiliations

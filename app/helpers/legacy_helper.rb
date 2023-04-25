@@ -1,7 +1,7 @@
 module LegacyHelper
   def position_with_class_delegate(affiliation)
     [
-      affiliation.t_position(I18n.locale),
+      "<strong>#{affiliation.t_position(I18n.locale)}</strong>",
       affiliation.class_delegate.nil? ? nil : t("class_delegate"), 
       "<span class='font-weight-normal'>#{affiliation.unit.label(I18n.locale)}</span>"
     ].compact.join(", ").html_safe
@@ -14,8 +14,12 @@ module LegacyHelper
   def hierarchy_links(y)
     y.split(" ").map do |l|
       link_to(l, "https://search.epfl.ch/?filter=unit&acro=#{l}")
-    end.join(" > ").html_safe
+    end.join(" › ").html_safe
   end
 
+  # Return the full url for static stuff coming from EPFL elements cdn
+  def belurl(path)
+    "https://epfl-si.github.io/elements/#{path}"
+  end
 
 end

@@ -1,0 +1,100 @@
+<div class="d-flex flex-wrap justify-content-between align-items-baseline">
+  <h1 class="mr-3"><%= @person.display_name %></h1>
+  <div>
+    <svg class="icon" aria-hidden="true"><use xlink:href="#icon-edit"></use></svg>
+    <a href="#">
+      <%= t 'action.edit_profile' %> <span class="sr-only"><%= t 'action.of' %> <%= @person.display_name %></span>
+    </a>
+  </div>
+</div>
+
+
+<div class="row mt-5">
+  <div class="col-md-12">
+    <div class="row people-basic-info">
+
+      <div class="col-md-4 col-lg-3 offset-lg-1 mb-3">
+        
+        <div class="row">
+          <div class="col-sm-12 mb-3">
+            <!-- TODO: add real picture -->
+            <!-- Placeholder when there is no profile picture -->
+            <img src="<%= belurl 'svg/portrait-placeholder.svg' %>" alt="Avatar placeholder image" class="img-fluid bg-gray-100">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <p>
+              <small>
+                <a href="#"><%= t 'action.accred_full_list' %></a>
+                <br>
+                <svg class="icon" aria-hidden="true"><use xlink:href="#icon-lock"></use></svg>
+                <a href="#"><% t 'action.admin_data' %></a>
+              </small>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="people-contacts col-md-8">
+        <div class="row">
+          <div class="col-sm-12 mb-4">
+            <%= render "legacy/s1/contact" %>
+          </div>
+        </div>
+        <%= render "legacy/s1/accreds" %>
+      </div>
+    </div><!-- people basic infos -->
+        
+    <hr>
+
+    <% unless @boxes['K'].empty? %>
+    <% @boxes['K'].each do |b| %>
+    <div class="row">
+      <div class="people-extra-info col-sm-12 mt-5">
+        <p><strong><%= b.label %></strong></p>
+        <div><%= sanitize(b.content) %></div>
+      </div>
+    </div>
+    <% end %>
+    <% end %>
+  </div>
+</div>
+
+<div class="position-relative mt-5">
+
+<nav class="nav-tabs-light-wrapper sticky-top" id="intermediate-nav">
+  <div class="container">
+    <ul class="nav nav-tabs-light">
+      <li class="nav-item">
+        <a class="nav-link" href="#biography"><%= t "nav.biography" %></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#publications"><%= t "nav.publications" %></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#teaching"><%= t "nav.teaching" %></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#research"><%= t "nav.research" %></a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<%= render "legacy/s1/biography" %>
+
+<% if @cv.any_publication? or @tcv.any_publication? %>
+<hr class="darker">
+<%= render "legacy/s1/publications" %>
+<% end %>
+
+<% if @ta.present? %>
+<hr class="darker">
+<%= render "legacy/s1/teaching" %>
+<% end %>
+
+<% unless @boxes['R'].empty? %>
+<hr class="darker">
+<%= render "legacy/s1/research" %>
+<% end %>

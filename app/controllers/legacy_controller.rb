@@ -1,13 +1,18 @@
 class LegacyController < ApplicationController
   layout "legacy"
 
-
   def show0
     common_show_data
+    respond_to do |format|
+      format.html { render layout: 'legacy0'  }
+    end
   end
 
-  def show
+  def show1
     common_show_data
+    respond_to do |format|
+      format.html { render layout: 'legacy1'  }
+    end
   end
 
  private
@@ -34,10 +39,13 @@ class LegacyController < ApplicationController
     end
     if @editable
       @tcv = @cv.translated_part(I18n.locale)
-      bb = @tcv.boxes.order(:position, :ordre)
+      bb = @tcv.boxes.visible.order(:position, :ordre)
       @boxes={}
       ['K', 'B', 'P', 'R', 'T'].each do |k|
         @boxes[k] = bb.select{|b| b.position == k}
+      end
+      unless @boxes['B'].empty?
+        @boxes['B'].first.label = "" if @boxes['B'].first.label == t("biography")
       end
     end
   end
