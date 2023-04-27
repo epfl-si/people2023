@@ -14,6 +14,16 @@ module ApplicationHelper
     cp = @client_from_epfl ? "tel" : "callto"
     link_to(pl.html_safe, "#{cp}:#{p}", opts)
   end
+
+  def link_to_or_text(txt, url, opts={})
+    if url.present?
+      link_to(txt, url, opts)
+    else
+      txt
+    end
+  end
+
+
 end
 
 

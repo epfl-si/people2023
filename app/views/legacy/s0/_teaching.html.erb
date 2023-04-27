@@ -3,13 +3,13 @@
 
   <% if @ta.bachelor_section_names.present? %>
   <div class="cmt-5">
-    <%= content_tag(:h4, t("bachelor_teaching_title")) %>
+    <%= content_tag(:h4, t("title.bachelor_teaching")) %>
     <%= content_tag(:p, @ta.bachelor_section_names.join(", ")) %>
   </div>
   <% end %>
   <% if @ta.doctoral_teaching.present? %>
   <div class="cmt-5">
-    <%= content_tag(:h4, t("doctoral_teaching_title")) %>
+    <%= content_tag(:h4, t("title.doctoral_teaching")) %>
     <% @ta.doctoral_section_names.each do |s| %>
       <%= content_tag(:p, s) %>
     <% end %>
@@ -19,7 +19,7 @@
   <% if @ta.has_phds? %>
   <div class="cmt-5 mt30">
     <% if @ta.current_phds.present? %>
-    <h4><%= t "current_phd_students_title" %></h4>
+    <h4><%= t "title.current_phd_students" %></h4>
     <p>
     <% @ta.current_phds.each do |s| %>
     <%= link_to(s.full_name, person_path(s.sciper)) %>
@@ -28,7 +28,7 @@
     <% end %>
 
     <% if @ta.past_phds.present? %>
-    <h4><%= t "past_phd_students_title" %></h4>
+    <h4><%= t "title.past_phd_students" %></h4>
     <p>
     <% @ta.past_phds.each do |s| %>
     <%= link_to(s.full_name, person_path(s.sciper)) %>

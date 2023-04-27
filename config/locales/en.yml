@@ -45,13 +45,9 @@ en:
     home: "Home directory"
     shell: "Shell"
   awards: "Awards"
-  bachelor_teaching_title: "Teaching"
   biography: "Biography"
   birthday: "Birthday"
   class_delegate: "Class delegate"
-  courses_title: "Courses"
-  current_phd_students_title: "PhD Students"
-  doctoral_teaching_title: "Teaching & PhD"
   hello: "Hello world"
   infoscience_publications: "Infoscience Publications"
   nationality: "Nationality"
@@ -61,7 +57,6 @@ en:
     teaching: "Teaching & PhD"
     research: "Research"
   office: "Office"
-  past_phd_students_title: "Past EPFL PhD Students"
   phone_type:
     FIXE_CONF: conf room
     FAX: fax
@@ -73,19 +68,29 @@ en:
     FIXE_ANALOG: analog
     VIDEO_CONF: video conf
     SIP_OTHER: sip
-  publications: "Publications"
+  publication:
+    title:
+      free: Notes on publications
+      infoscience: EPFL Infoscience
+      people: Other Publications
   student:
     female: Student
     male: Student
   teaching: "Teaching"
   title:
     awards: "Awards"
+    bachelor_teaching: "Teaching"
     biography: "Biography"
+    current_phd_students: "PhD Students"
+    courses: "Courses"
+    doctoral_teaching: "Teaching & PhD"
     education: "Education"
     expertise: "Fields of expertise"
     of: "of"
+    past_phd_students: "Past EPFL PhD Students"
     publications: "Publications"
     research: "Research"
     teaching: "Teaching & PhD"
     work_experience: "Work Experience"
+
   work_experience: "Work Experience"

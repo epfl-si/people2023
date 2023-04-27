@@ -14,13 +14,9 @@ fr:
     home: "Home directory"
     shell: "Shell"
   awards: "Awards"
-  bachelor_teaching_title: "Enseignement"
   birthday: "Date de naissance"
   biography: "Biographie"
   class_delegate: "D&eacute;l&eacute;gu&eacute; de classe"
-  courses_title: "Cours"
-  current_phd_students_title: "Doctorants"
-  doctoral_teaching_title: "Enseignement & Phd"
   hello: "Bonjour"
   infoscience_publications: "Publications Infoscience"
   nationality: "Nationalit&eacute;"
@@ -30,7 +26,6 @@ fr:
     teaching: "Enseignement"
     research: "Recherche"
   office: "Local"
-  past_phd_students_title: "A dirig&eacute; les th&egrave;ses EPFL de"
   phone_type:
     FIXE_CONF: fixe conf
     FAX: fax
@@ -42,19 +37,29 @@ fr:
     FIXE_ANALOG: fixe analog
     VIDEO_CONF: video conf
     SIP_OTHER: sip other
-  publications: "Publications"
+  publication:
+    title:
+      free: Notes on publications
+      infoscience: EPFL Infoscience
+      people: Other Publications
   student:
     female: Etudiante
     male: Etudiant
   teaching: "Enseignement"
   title:
     awards: "Récompenses"
+    bachelor_teaching: "Enseignement"
     biography: "Biographie"
+    courses: "Cours"
+    current_phd_students: "Doctorant·es"
+    doctoral_teaching: "Enseignement & Phd"
     education: "Formation"
     expertise: "Champs de compétences"
     of: "de"
+    past_phd_students: "Ancien·nes doctorant·es"
     publications: "Publications"
     research: "Recherche"
     teaching: "Enseignement"
     work_experience: "Parcours professionnel"
+
   work_experience: "Parcours professionnel"
