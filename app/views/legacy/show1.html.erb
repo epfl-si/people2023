@@ -60,7 +60,7 @@
 </div>
 
 <div class="position-relative mt-5">
-  <% if @cv.any_publication? or @tcv.any_publication? or @ta.present? or @boxes['R'].present? %>
+  <% if @cv.any_publication? or @tcv.any_publication? or @ta.present? and @ta.has_ta? or @boxes['R'].present? %>
   <nav class="nav-tabs-light-wrapper sticky-top" id="intermediate-nav">
     <div class="container">
       <ul class="nav nav-tabs-light">
@@ -72,7 +72,7 @@
           <a class="nav-link" href="#publications"><%= t "nav.publications" %></a>
         </li>
         <% end %>
-        <% if @ta.present? %>
+        <% if @ta.present? and @ta.has_ta? %>
         <li class="nav-item">
           <a class="nav-link" href="#teaching"><%= t "nav.teaching" %></a>
         </li>
@@ -87,14 +87,25 @@
   </nav>
   <% end %>
 
-  <%= render "legacy/s1/biography" %>
+  <% 
+    # TODO: move this crap into a model or to the controller...
+    if ( 
+      @tcv.present? and (@tcv.curriculum.present? or @tcv.visible_expertise?) or
+      @boxes['B'].present? or 
+      @cv.educations.present? or 
+      @cv.experiences.present? or 
+      @person.awards.present?
+    )
+      render "legacy/s1/biography"
+    end
+  %>
 
-  <% if @cv.any_publication? or @tcv.any_publication? %>
+  <% if @cv.any_publication? or @tcv.present? and @tcv.any_publication? %>
   <hr class="darker">
   <%= render "legacy/s1/publications" %>
   <% end %>
 
-  <% if @ta.present? %>
+  <% if @ta.present? and @ta.has_ta? %>
   <hr class="darker">
   <%= render "legacy/s1/teaching" %>
   <% end %>
@@ -103,4 +114,4 @@
   <hr class="darker">
   <%= render "legacy/s1/research" %>
   <% end %>
-</div>  
+</div>

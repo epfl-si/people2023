@@ -14,6 +14,7 @@
     <% else %>
       <% phoneclass="col-md-12" %> 
     <% end %>
+    <% if affiliation.phones.present? %>
     <div class="<%= phoneclass %>">
       <% affiliation.phones.select{|p| !p.hidden?}.each do |phone| %>
         <span class="people-btn">
@@ -32,6 +33,7 @@
         <%= hierarchy_links affiliation.hierarchy %>
       </small>
     </div>
+    <% end %>
     </div>
     <% if affiliation.unit.url? %>
     <div class="row">

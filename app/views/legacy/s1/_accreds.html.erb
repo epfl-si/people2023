@@ -31,12 +31,14 @@
             </span>
           <% end %>
           <% end %>
+          <% if affiliation.hierarchy.present? %>
           <small>
             <%= t "affiliation.unit" %>: <%= hierarchy_links affiliation.hierarchy %>
           </small>
+          <% end %>
         </p>
       </div>
-      <% if affiliation.unit.url? %>
+      <% if affiliation.unit.url.present? %>
       <div class="col-sm-12">
         <p>
           <span class="sr-only"><%= t "website" %>: </span>

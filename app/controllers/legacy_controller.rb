@@ -39,7 +39,7 @@ class LegacyController < ApplicationController
     end
     if @editable
       @tcv = @cv.translated_part(I18n.locale)
-      bb = @tcv.boxes.visible.order(:position, :ordre)
+      bb = @tcv.boxes.visible.with_content.order(:position, :ordre)
       @boxes={}
       ['K', 'B', 'P', 'R', 'T'].each do |k|
         @boxes[k] = bb.select{|b| b.position == k}

@@ -22,7 +22,7 @@ class Atela::Accred
 
     @unit = nil
     @address = Atela::Address.new(data['address'])
-    @phones = data['phones'].map{|d| Atela::Phone.new(d)}
+    @phones = data['phones'].present? ? data['phones'].map{|d| Atela::Phone.new(d)} : []
     @hierarchy = data['hierarchie']
     @order = data['ordre']
     @rooms = data.key?('rooms') ? data['rooms'].map{|d| Atela::Room.new(d)} : []

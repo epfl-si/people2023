@@ -14,7 +14,7 @@ class Isa::Course
 end
 
 class Isa::Thesis
-  attr_reader :exmat_date, :number,:first_name, :last_name, :sciper
+  attr_reader :exmat_date, :number,:first_name, :last_name, :full_name, :sciper
   def initialize(t)
     # @data=t
     d = t['dateExmatriculation']
@@ -24,11 +24,8 @@ class Isa::Thesis
 
     @first_name = t['doctorant']['firstName']
     @last_name = t['doctorant']['lastName']
+    @full_name = t['doctorant']['fullName'] || "#{@first_name} #{@last_name}" 
     @sciper = t['doctorant']['sciper']
-  end
-
-  def full_name
-    "#{@last_name} #{@forst_name}" 
   end
 
   def past?
