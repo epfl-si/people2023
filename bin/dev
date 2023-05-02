@@ -22,5 +22,5 @@ if [ -f /app/tmp/pids/server.pid ] ; then
 	fi
 fi
 
-cd "$(dirname "$0")/.."
+# cd "$(dirname "$0")/.."
 node_modules/.bin/concurrently -c red,blue -n puma,esbuild "./bin/rails server -p ${PORT:-3000} -b ${ADDR:-127.0.0.1}" "yarn build --watch"

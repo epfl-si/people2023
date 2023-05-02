@@ -15,10 +15,11 @@ build:
 kup:
 	KILLPID=1 docker-compose -f $(COMPOSE) up -d
 
-up: dcup
+up:
+	docker compose -f $(COMPOSE) up -d
 
 dcup:
-	docker-compose -f $(COMPOSE) up -d 
+	docker-compose -f $(COMPOSE) up --no-recreate -d 
 
 kc:
 	docker-compose --profile kc -f $(COMPOSE) up -d keycloak
@@ -26,6 +27,10 @@ kc:
 # atela:
 # 	docker-compose --profile atela -f $(COMPOSE) up -d atela
 
+fulldown:
+	docker-compose --profile test -f $(COMPOSE) down
+	docker-compose --profile kc   -f $(COMPOSE) down
+	docker-compose -f $(COMPOSE) down
 down: 
 	docker-compose -f $(COMPOSE) down
 
@@ -46,6 +51,14 @@ dbconsole: dcup
 
 migrate: dcup
 	docker-compose -f $(COMPOSE) exec webapp ./bin/rails db:migrate
+
+testup:
+	docker-compose --profile test -f $(COMPOSE) up --no-recreate -d selenium
+
+test: testup test-system
+
+test-system:
+	docker-compose -f $(COMPOSE) exec webapp ./bin/rails test:system
 
 # setup_kc: dcup
 # 	sleep 10

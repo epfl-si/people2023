@@ -77,6 +77,13 @@ services:
         - RAILS_ENV=development
     env_file: .env
 
+  selenium:
+    image: selenium/standalone-chrome:96.0
+    profiles:
+      - test
+    networks:
+      - default
+
 volumes:
   mariadb: {}
 
