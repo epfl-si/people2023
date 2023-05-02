@@ -14,7 +14,6 @@
 class Atela::Unit
   attr_reader :id, :label, :level, :name
   def initialize(data)
-    p data
     @id = data['id']
     @label = data['label']
     @level = data['level']

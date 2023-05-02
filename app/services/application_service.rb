@@ -52,7 +52,6 @@ class ApplicationService
     # TODO: url hash might not be unique if params are added to the request.
     # Therefore it is safer to override cache_key or to provide an id method
     # for the moment it is responsability of the derived class
-    puts "cache_key: url = '#{url}'"
     uid=id.present? ? id : Digest::MD5.hexdigest(url)
     "#{self.class.name.underscore}/#{uid}"
   end

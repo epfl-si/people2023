@@ -16,10 +16,6 @@ class Atela::Accred
   attr_reader :address, :hierarchy, :order, :phones, :rooms
 
   def initialize(data)
-    puts "--------------"
-    p data
-    puts "--------------"
-
     @unit = nil
     @address = Atela::Address.new(data['address'])
     @phones = data['phones'].present? ? data['phones'].map{|d| Atela::Phone.new(d)} : []
