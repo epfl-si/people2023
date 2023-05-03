@@ -77,11 +77,20 @@ services:
         - RAILS_ENV=development
     env_file: .env
 
+  # TODO: add also firefox as an option (see https://nicolasiensen.github.io/2022-03-11-running-rails-system-tests-with-docker/)
+  # https://github.com/SeleniumHQ/docker-selenium
   selenium:
-    image: selenium/standalone-chrome:96.0
+    image: selenium/standalone-chrome:112.0
+    shm_size: '2gb'
     profiles:
       - test
+    labels:
+      - traefik.docker.network=traefik
+      - traefik.http.services.peoselen.loadbalancer.server.port=7900
+      - traefik.http.routers.peoselen.rule=Host("selenium.${DOMAIN:-dev.jkldsa.com}")
+      - traefik.http.routers.peoselen.tls=true
     networks:
+      - traefik
       - default
 
 volumes:

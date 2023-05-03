@@ -1,4 +1,4 @@
--include .env
+	-include .env
 KBPATH = /keybase/team/epfl_people.prod
 COMPOSE ?= docker-compose.yml
 SSH_AUTH_SOCK_FILE ?= $(SSH_AUTH_SOCK)
@@ -53,11 +53,11 @@ migrate: dcup
 	docker-compose -f $(COMPOSE) exec webapp ./bin/rails db:migrate
 
 testup:
-	docker-compose --profile test -f $(COMPOSE) up --no-recreate -d selenium
+	docker-compose --profile test -f $(COMPOSE) up --no-recreate -d
 
-test: testup test-system
+test: test-system
 
-test-system:
+test-system: testup
 	docker-compose -f $(COMPOSE) exec webapp ./bin/rails test:system
 
 # setup_kc: dcup
