@@ -8,10 +8,11 @@ class LegacyController < ApplicationController
     end
   end
 
-  def show1
+  def show
     common_show_data
     respond_to do |format|
-      format.html { render layout: 'legacy1'  }
+      format.html { render layout: 'legacy'  }
+      format.vcf { render layout: false }
     end
   end
 
