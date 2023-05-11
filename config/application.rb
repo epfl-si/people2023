@@ -46,6 +46,7 @@ module HelloRails
     config.isa_url = ENV.fetch("ISA_URL", 'https://isa.epfl.ch/services')
     config.isa_no_check_ssl = ENV.fetch("ISA_NO_CHECK_SSL", false)
     config.intranet_re = Regexp.new(ENV.fetch("INTRANET_RE", '^128\.17[89]'))
+    config.official_url = ENV.fetch("OFFICIAL_URL", "https://people.epfl.ch")
 
   end
 end

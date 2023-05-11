@@ -130,8 +130,25 @@ class Legacy::Person < Legacy::BaseDinfo
     @display_name ||= "#{self.prenom_usuel || self.prenom_acc} #{self.nom_usuel || self.nom_acc}"
   end
 
+  def name
+    self.prenom_usuel || self.prenom_acc
+  end
+
+  def surname
+    self.nom_usuel || self.nom_acc
+  end
+
   def email_address
     self.email.addrlog
+  end
+
+  def people_url
+    nps=self.email.addrlog.gsub(/@.*$/, '')
+    "#{Rails.configuration.official_url}/#{nps}"
+  end
+
+  def address
+    self.affiliations.first.address
   end
 
   def phone
