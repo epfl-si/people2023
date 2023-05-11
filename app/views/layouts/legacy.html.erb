@@ -40,43 +40,20 @@
 </head>
 
 <body>
-<nav class="access-nav" aria-label="Raccourcis de navigation">
-  <ul>
-    <li>
-      <a class="btn btn-primary" href="/" title="[ALT + 1]" accesskey="1">Page d'accueil du site</a>
-    </li>
-    <li>
-      <a class="btn btn-primary" href="#main" title="[ALT + 2]" accesskey="2">Accéder au contenu</a>
-    </li>
-    <li>
-      <a class="btn btn-primary" href="#main-navigation" title="[ALT + 3]" accesskey="3">Accéder à la navigation principale</a>
-    </li>
-    <li>
-      <a class="btn btn-primary" href="#nav-aside" title="[ALT + 4]" accesskey="4">Accéder à la navigation latérale</a>
-    </li>
-    <li>
-      <a class="btn btn-primary" href="#search" title="[ALT + 5]" accesskey="5">Accéder à la recherche</a>
-    </li>
-    <li>
-      <a class="btn btn-primary" href="mailto:email@example.com" title="[ALT + 6]" accesskey="6">Nous contacter</a>
-    </li>
-  </ul>
-</nav>
-
-
 <header role="banner" class="header header-light">
   <div class="header-light-content">
-    <a class="logo" href="#">
+    <a class="logo" href="https://www.epfl.ch/">
       <img src="<%= belurl 'svg/epfl-logo.svg' %>" alt="Logo EPFL, École polytechnique fédérale de Lausanne" class="img-fluid">
     </a>
     <p class="site-title">
-      <a href="#">Online People Directory</a>
+      <a href="">Online People Directory</a>
     </p>
 
-    <form action="#" class="d-xl-none">
+    <%= form_with url: "https://search.epfl.ch", method: :get, html: {class: "d-xl-none"} do |form| %>
+      <%= form.hidden_field :filter, value: "people" %>
       <a id="search-mobile-toggle" class="search-mobile-toggle searchform-controller" href="#">
         <svg class="icon" aria-hidden="true"><use xlink:href="#icon-search"></use></svg>
-        <span class="toggle-label sr-only">Afficher / masquer le formulaire de recherche</span>
+        <span class="toggle-label sr-only"><%= t "action.show_hide_search_form" %></span>
       </a>
       <div class="input-group search-mobile" role="search">
         <div class="input-group-prepend">
@@ -84,29 +61,30 @@
             <svg class="icon" aria-hidden="true"><use xlink:href="#icon-search"></use></svg>
           </span>
         </div>
-        <label for="search" class="sr-only">Rechercher sur le site</label>
-        <input type="text" class="form-control" name="search" placeholder="Rechercher">
+        <label for="search" class="sr-only"><% t "action.search_people" %></label>
+        <input type="text" class="form-control" name="search" placeholder="<%= t "action.search" %> >
         <div class="input-group-append">
           <a id="search-mobile-close" class="search-mobile-close searchform-controller" href="#">
             <svg class="icon" aria-hidden="true"><use xlink:href="#icon-close"></use></svg>
-            <span class="toggle-label sr-only">Masquer le formulaire de recherche</span>
+            <span class="toggle-label sr-only"><%= t "action.hide_search_form" %></span>
           </a>
         </div>
-      </div>
-    </form>
+    <% end %>
     
     <div class="dropdown dropright search d-none d-xl-block show">
       <a class="dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="true">
         <svg class="icon" aria-hidden="true"><use xlink:href="#icon-search"></use></svg>
       </a>
-      <form action="#" class="dropdown-menu border-0 p-0 show" x-placement="right-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(50px, -12.75px, 0px);">
+      <%= form_with url: "https://search.epfl.ch", method: :get, html: {"class" => "dropdown-menu border-0 p-0", "x-placement" => "right-start", "style" => "position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(50px, -12.75px, 0px);"} do |form| %>
+        <%= form.hidden_field :filter, value: "people" %>
         <div class="search-form mt-1 input-group">
-          <label for="search" class="sr-only">Rechercher sur le site</label>
-          <input type="text" class="form-control" name="search" placeholder="Rechercher">
-          <button type="submit" class="d-none d-xl-block btn btn-primary input-group-append">Valider</button>
+          <label for="search" class="sr-only"><% t "action.search_people" %></label>
+          <input type="text" class="form-control" name="q" placeholder="<%= t "action.search" %>">
+          <button type="submit" class="d-none d-xl-block btn btn-primary input-group-append"><%= t "action.valider" %></button>
         </div>
-      </form>
+      <% end %>
     </div>
+
     <nav class="nav-lang ml-auto dropdown" aria-label="Change language">
       <a href="#" class="dropdown-toggle btn btn-secondary" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown">
         <svg class="icon" aria-hidden="true"><use xlink:href="#icon-planet"></use></svg>

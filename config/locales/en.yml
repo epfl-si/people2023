@@ -34,7 +34,12 @@ en:
     accred_full_list: "Full list of positions and address"
     admin_data: "Administrative data"
     edit_profile: "Edit profile"
+    hide_search_form: "Hide the search form"
     of: "of"
+    search: "Search"
+    search_people: "Search for a person"
+    show_hide_search_form: "Show / hide the search form"
+    validate: "Submit"
   admin_data:
     title: "Admin data"
     sciper: "SCIPER Number"
