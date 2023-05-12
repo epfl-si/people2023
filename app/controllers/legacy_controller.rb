@@ -34,6 +34,14 @@ class LegacyController < ApplicationController
     # @cv = Legacy::Cv.find(@sciper)
     @cv = Legacy::Cv.where(sciper: @sciper).first
     @editable = !@cv.nil? && @person.can_edit_profile?
+    if @editable
+      aph = Legacy::AccredPref.visible_by_sciper(@sciper).each_with_object({}) {|a,h| h[a.unit.to_i] = a}
+      @affiliations = @person.affiliations.select{|a| aph.key?(a.unit.id)}.sort{|a,b| aph[a.unit.id].ordre <=> aph[b.unit.id].ordre}
+    else
+      @affiliations = @person.affiliations
+    end
+
+
     if @person.possibly_teacher?
       @ta = Isa::Teaching.new(@sciper)
     else

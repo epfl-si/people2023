@@ -1,4 +1,4 @@
-<% @person.affiliations.each_with_index do |affiliation, indx| %>
+<% @affiliations.each_with_index do |affiliation, indx| %>
   <%= ee_collapse(position_with_class_delegate(affiliation), {expanded: indx==0}) do -%>
     <div class="row pt-2 pb-2">
       <% if affiliation.address %>
