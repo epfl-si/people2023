@@ -1,4 +1,5 @@
 class LegacyController < ApplicationController
+  protect_from_forgery
   layout "legacy"
 
   def show0

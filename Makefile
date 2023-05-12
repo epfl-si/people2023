@@ -7,10 +7,17 @@ SSH_AUTH_SOCK_DIR = $(dir $(SSH_AUTH_SOCK_FILE))
 export
 
 # ---------------------------------------------------------------- run local app
-.PHONY: build up dcup down logs console dbconsole setup
+.PHONY: build codecheck up kup dcup down fulldown logs ps console dbconsole shell 
 
-build:
+build: codecheck
 	docker-compose -f $(COMPOSE) build
+
+codecheck:
+	# TODO: add linters and automated tests too...
+	# bundle-audit returns 1 if there are vulnerabilities => prevents build
+	# nicer gui available at https://audit.fastruby.io
+	bundle exec bundle-audit check --update
+	# 	bundle exec brakeman
 
 kup:
 	KILLPID=1 docker-compose -f $(COMPOSE) up -d
@@ -49,9 +56,11 @@ shell: dcup
 dbconsole: dcup
 	docker-compose -f $(COMPOSE) exec mariadb mysql -u root --password=mariadb 
 
+.PHONY: migrate
 migrate: dcup
 	docker-compose -f $(COMPOSE) exec webapp ./bin/rails db:migrate
 
+.PHONY: test testup test-system
 testup:
 	docker-compose --profile test -f $(COMPOSE) up --no-recreate -d
 

@@ -75,6 +75,10 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+
+  # security tools
+  gem "bundler-audit"
+  gem "brakeman"
 end
 
 group :test do
@@ -89,3 +93,12 @@ gem "prime", "~> 0.1.2"
 
 # To enable CORS from keycloak
 gem 'rack-cors'
+
+# ------------------------------------------------------------------------------
+# To be tested, possibly usefull for increasing security in production:
+
+# https://github.com/rack/rack-attack
+# gem 'rack-attack'
+
+# https://github.com/github/secure_headers
+# gem 'secure_headers'
