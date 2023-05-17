@@ -39,7 +39,7 @@ class Legacy::Person < Legacy::BaseDinfo
       self.accreds.all.map do |a| 
         uid=a.unit_id
         aa = a.attributes.merge({address: adh[uid], phones: phh[uid], prefs: prh[uid]})
-        Legacy::FullAccreditation.new(aa)
+        Legacy::Affiliation.new(aa)
       end.sort
     end
   end

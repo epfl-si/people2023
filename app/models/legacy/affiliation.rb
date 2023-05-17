@@ -1,28 +1,49 @@
-# Attempt to have a class that works for all kind of people
-class Legacy::Affiliation
-  attr_reader :class_delegate, :unit, :address, :phones, :hierarchy, :position, :rooms
-  def initialize(accred, atela_accred, sex)
-    @accred = accred
-    @position = accred.position
-    @class_delegate = accred.class_delegate
-    @unit = accred.unit
+# Extended accred including address, phones, people preferences
+class Legacy::Affiliation < Legacy::Accreditation
+  attr_reader :address
 
-    if atela_accred.nil?
-      @address = nil
-      @phones = nil
-      @rooms = nil
-    else
-      @address = atela_accred.address
-      @phones = atela_accred.phones
-      @hierarchy = atela_accred.hierarchy
-      @rooms = atela_accred.rooms
-    end
-    @sex = sex
+  def <=>(other)
+    self.order <=> other.order
   end
-  def t_position(lang=I18n.locale)
-    @accred.function
+
+  def hidden?
+    @prefs.present? and @prefs.hidden?
   end
-  def room
-    @rooms.present? ? @rooms.first : nil
+
+  def visible?
+    not hidden?
   end
+
+  def phones=(o)
+    @phones = o.sort
+  end
+
+  def address=(a)
+    @address = a
+  end
+
+  def prefs=(p)
+    @prefs = p
+  end
+
+  def order
+    @prefs.present? ? @prefs.order : super
+  end
+
+  def phones
+    @phones
+  end
+
+  def visible_phones
+    @phones.select{|p| p.visible?}.sort #.map{|p| p.phone}
+  end
+
+  def phone
+    @phones.present? ? @phones.sort.first : nil
+  end
+
+  # def room
+  #   @phones.present? ? @phones.local : nil
+  # end
+
 end
