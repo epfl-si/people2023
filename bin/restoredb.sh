@@ -47,6 +47,8 @@ restore() {
 		tables="$ACCRED_TABLES"; ;;
 	dinfo)
 		tables="$ACCRED_TABLES"; ;;
+	bottin)
+		tables="$BOTTIN_TABLES"; ;;
 	*)
 		tables=""; ;;
 	esac
