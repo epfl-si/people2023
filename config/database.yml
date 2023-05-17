@@ -51,3 +51,7 @@ legacy_dev_cv:
 legacy_dev_dinfo:
   <<: *legacy_dev
   database: dinfo
+
+legacy_dev_bottin:
+  <<: *legacy_dev
+  database: bottin

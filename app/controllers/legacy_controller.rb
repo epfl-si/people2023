@@ -1,16 +1,18 @@
 class LegacyController < ApplicationController
   protect_from_forgery
+  before_action :set_sciper_and_email, only: [:show0, :show]
+  before_action :set_show_data, only: [:show0, :show]
   layout "legacy"
 
   def show0
-    common_show_data
+    @page_title = "EPFL - #{@person.display_name}"
     respond_to do |format|
       format.html { render layout: 'legacy0'  }
     end
   end
 
   def show
-    common_show_data
+    @page_title = "EPFL - #{@person.display_name}"
     respond_to do |format|
       format.html { render layout: 'legacy'  }
       format.vcf { render layout: false }
@@ -18,7 +20,8 @@ class LegacyController < ApplicationController
   end
 
  private
-  def common_show_data
+
+  def set_sciper_and_email
     sciper_or_name = params[:sciper_or_name]
     @sciper = nil
     if sciper_or_name =~ /^\d{6}$/
@@ -28,19 +31,19 @@ class LegacyController < ApplicationController
       @email = Legacy::Email.where("addrlog = ? OR addrlog LIKE ?", "#{sciper_or_name}@epfl.ch", "#{sciper_or_name}@epfl.%").first
       @sciper=@email.sciper unless @email.nil?
     end
+    Rails.logger.debug("LegacyController::set_sciper_and_email done")
+  end
+
+  def set_show_data
+    Rails.logger.debug("set_show_data")
+    set_sciper_and_email unless @sciper
     @person = Legacy::Person.find(@sciper)
-    @page_title = "EPFL - #{@person.display_name}"
+    @affiliations = @person.full_accreds
+
     # @cv can be nil because not everybody can edit his personal page
     # @cv = Legacy::Cv.find(@sciper)
     @cv = Legacy::Cv.where(sciper: @sciper).first
     @editable = !@cv.nil? && @person.can_edit_profile?
-    if @editable
-      aph = Legacy::AccredPref.visible_by_sciper(@sciper).each_with_object({}) {|a,h| h[a.unit.to_i] = a}
-      @affiliations = @person.affiliations.select{|a| aph.key?(a.unit.id)}.sort{|a,b| aph[a.unit.id].ordre <=> aph[b.unit.id].ordre}
-    else
-      @affiliations = @person.affiliations
-    end
-
 
     if @person.possibly_teacher?
       @ta = Isa::Teaching.new(@sciper)
@@ -58,5 +61,6 @@ class LegacyController < ApplicationController
         @boxes['B'].first.label = "" if @boxes['B'].first.label == t("biography")
       end
     end
+    Rails.logger.debug("LegacyController::set_show_data done")
   end
 end

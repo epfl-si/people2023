@@ -81,7 +81,7 @@ test-system: testup
 # -------------------------------------------------- restore legacy DB from prod
 # since we moved this to the external script we keep them just as a reminder
 
-.PHONY: restore restore_legacy restore_cv restore_cadi restore_dinfo restore_accred
+.PHONY: restore restore_legacy restore_cv restore_cadi restore_dinfo restore_accred restore_bottin
 
 restore: restore_legacy
 

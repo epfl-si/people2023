@@ -6,8 +6,8 @@
   <%= link_to	@email.address, "mailto:#{@email.address}", class: "btn btn-sm btn-primary" %>
   <% end %>
 
-  <% if @person.phone %>
-  <%= phone_link(@person.phone.number, class: "btn btn-sm btn-secondary") %>
+  <% if @person.default_phone %>
+  <%= phone_link(@person.default_phone.number, class: "btn btn-sm btn-secondary") %>
   <% end %>
 
   <% if @editable %>

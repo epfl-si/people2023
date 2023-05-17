@@ -7,6 +7,7 @@ module LegacyHelper
     ].compact.join(", ").html_safe
   end
 
+  # expect a type Legacy::PostalAddress as input
   def address(a)
     a.lines[1..].join("<br>").html_safe
   end

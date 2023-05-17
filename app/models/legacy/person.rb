@@ -2,9 +2,12 @@ class Legacy::Person < Legacy::BaseDinfo
   self.table_name = 'sciper'
   self.primary_key = 'sciper'
 
-  has_one  :email, :class_name => "Email", :foreign_key => "sciper"
+  has_one :email, :class_name => "Email", :foreign_key => "sciper"
+  has_one :delegate, :class_name => "Delegate", :foreign_key => "sciper"
 
-  # has_many :active_accreds, -> { 
+  default_scope {includes(:email, :delegate)}
+
+  # has_many :accreds, -> { 
   #   where("#{Legacy::Accreditation.table_name}.finval IS NULL OR #{Legacy::Accreditation.table_name}.finval > ?", Date.today.strftime).
   #   order(:ordre).
   #   joins(:status).
@@ -12,32 +15,81 @@ class Legacy::Person < Legacy::BaseDinfo
   #   joins("LEFT OUTER JOIN positions ON positions.id = accreds.posid")
   # }, :class_name => "Accreditation", :foreign_key => "persid"
   # in the end the following is faster and easier
-  has_many :active_accreds, -> {
-    includes(:status, :kind, :position).
-    where("#{Legacy::Accreditation.table_name}.finval IS NULL OR #{Legacy::Accreditation.table_name}.finval > ?", Date.today.strftime).
-    order(:ordre)
-  }, :class_name => "Accreditation", :foreign_key => "persid"
-  has_many :active_units, :class_name => "Unit", :through => :active_accreds, :foreign_key => "persid", :source => "unit"
-  has_many :active_positions, :class_name => "Position", :through => :active_accreds, :foreign_key => "persid", :source => "position"
+  has_many :accreds, :class_name => "Accreditation", :foreign_key => "persid"
+  
+  has_many :address, :class_name => "PostalAddress", :foreign_key => "pers_id"
+  has_many :phones, :class_name => "PersonalPhone", :foreign_key => "pers_id"
+  has_many :accred_prefs, :class_name => "AccredPref", :foreign_key => "sciper"
 
+  has_one  :account, :class_name => "Account", :foreign_key => "sciper"
+  has_many :awards, :class_name => "Award", :foreign_key => "sciper"
+
+  has_many :units, :class_name => "Unit", :through => :accreds, :foreign_key => "persid", :source => "unit"
+  has_many :positions, :class_name => "Position", :through => :accreds, :foreign_key => "persid", :source => "position"
   has_many :policies, :class_name => "Policy", :foreign_key => "persid"
   has_many :active_policies, -> { where("#{Legacy::Policy.table_name}.finval IS NULL OR #{Legacy::Policy.table_name}.finval > ?", Date.today.strftime) }, :class_name => "Policy", :foreign_key => "persid"
   has_many :active_properties, :class_name => "Property", :through => :active_policies, :foreign_key => "persid", :source => "property"
 
-  has_many :accred_prefs, :class_name => "AccredPref", :foreign_key => "sciper"
-  has_one :account, :class_name => "Account", :foreign_key => "sciper"
-
-  has_many :awards, :class_name => "Award", :foreign_key => "sciper"
-
-  # default_scope { includes(:author).order('created_at ASC') }
-
-  def affiliations
-    active_accreds.map{|a| Legacy::Affiliation.new(a, atela.accreds[a.unitid], sex)}
+  # merge accred data with data from dinfo (office, address) and people (prefs)
+  def full_accreds
+    @full_accreds ||= begin
+      adh = address_by_unit
+      phh = phones_by_unit
+      prh = prefs_by_unit
+      self.accreds.all.map do |a| 
+        uid=a.unit_id
+        aa = a.attributes.merge({address: adh[uid], phones: phh[uid], prefs: prh[uid]})
+        Legacy::FullAccreditation.new(aa)
+      end.sort
+    end
   end
 
-  def atela
-    @atela ||= Atela::Person.new(self.sciper)
+  def visible_full_accreds
+    full_accreds.select{|a| a.visible?}
   end
+
+  def default_phone
+    (phones_by_unit['default'] || visible_full_accreds).first.phone
+  end
+
+  def address_by_unit
+    @address_by_unit ||= self.address.all.each_with_object({}) {|v, h| h[v.unit_id] = v}
+  end
+
+  def phones_by_unit
+    @phones_by_unit ||= self.phones.all.each_with_object({}) do |v, h| 
+      h[v.unit_id] ||= []
+      h[v.unit_id] << v
+    end
+  end
+
+  def prefs_by_unit
+    @prefs_by_unit ||= self.accred_prefs.all.each_with_object({}) {|v, h| h[v.unit_id] = v}
+  end
+
+  # def address
+  #   self.affiliations.first.address
+  # end
+
+  # def phone
+  #   atela.phone
+  # end
+
+  # def room 
+  #   atela.room
+  # end
+
+
+
+  # def affiliations
+  #   accreds.map{|a| Legacy::Affiliation.new(a, atela.accreds[a.unitid], sex)}
+  # end
+
+  # def atela
+  #   @atela ||= Atela::Person.new(self.sciper)
+  # end
+
+
 # # {
 #   "address"=>{
 #     "adr"=>"EPFL SI IDEV-FSD $ INN 012 (Bâtiment INN) $ Station 14 $ CH-1015 Lausanne", 
@@ -95,9 +147,9 @@ class Legacy::Person < Legacy::BaseDinfo
   end
 
   def can_edit_profile?
-    self.active_accreds.any? {|a| a.can_edit_profile?} ||
+    self.accreds.any? {|a| a.can_edit_profile?} ||
       self.active_properties.map{|p| p.id}.include?(7) ||
-        self.active_positions.map{|p| p.labelfr}.include?('Professeur honoraire')
+        self.positions.map{|p| p.labelfr}.include?('Professeur honoraire')
   end
 
   # $is_achieving_professor = $ENV{FORCE_ACHIEVING_PROF} || does_have_right_anywhere($self, $sciper, 'AAR.report.control');
@@ -147,18 +199,6 @@ class Legacy::Person < Legacy::BaseDinfo
     "#{Rails.configuration.official_url}/#{nps}"
   end
 
-  def address
-    self.affiliations.first.address
-  end
-
-  def phone
-    atela.phone
-  end
-
-  def room 
-    atela.room
-  end
-
   def sex
     self.sexe
   end
@@ -179,11 +219,6 @@ class Legacy::Person < Legacy::BaseDinfo
     self.accreditations.select{|a| a.accred_show == "1"}.map{|a| a.unit }
   end
 
-  def solved_accreds
-    active_accreds.map do |a|
-
-    end
-  end
 
 # dinfo
 #       dinfo.sciper.nom_acc,      dinfo.sciper.nom_usuel,

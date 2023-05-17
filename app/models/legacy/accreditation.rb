@@ -1,10 +1,3 @@
-# class Legacy::AccredDisplay < Legacy::BaseCv
-#   self.table_name = 'accreds'
-#   self.primary_key = nil
-#   # belongs_to :unit, :class_name => "Unit", :foreign_key => "unit"
-#   # belongs_to :cv,   :class_name => "Cv", :foreign_key => "sciper"
-# end
-
 # accred part of getAllAccredsSolved
 #       accreds.*,
 #       statuses.`name`         AS statusname,
@@ -29,15 +22,15 @@
 class Legacy::Accreditation < Legacy::BaseAccred
   self.table_name = 'accreds'
   self.primary_key = 'persid'
+  belongs_to :person, :class_name => "Person", :foreign_key => "persid", :inverse_of => :accreds
   belongs_to :unit, :class_name => "Unit", :foreign_key => "unitid"
-  belongs_to :person, :class_name => "Person", :foreign_key => "persid"
   belongs_to :position, :class_name => "Position", :foreign_key => "posid"
   belongs_to :status, :class_name => "Status", :foreign_key => "statusid"
   belongs_to :kind, :class_name => "PersonClass", :foreign_key => "classid"
 
-  # def dinfos
-  #   @dinfos ||= PostalAddress.join()
-  #   @pa ||= PostalAddress.where(sciper: self.persid, unit: )
+  default_scope {
+    joins(:position, :status, :kind).includes(:unit).where(finval: nil)
+  }
 
   def unit_id
     self.unitid
@@ -45,6 +38,10 @@ class Legacy::Accreditation < Legacy::BaseAccred
 
   def sciper
     self.persid
+  end
+
+  def order
+    self.ordre
   end
 
   def can_edit_profile?
@@ -57,7 +54,7 @@ class Legacy::Accreditation < Legacy::BaseAccred
     [4, 5, 6].include?(self.statusid)
   end
 
-  def function(lang=I18n.locale)
+  def t_position(lang=I18n.locale)
     gender = self.person.gender
     tablegender = gender == "female" ? "xx" : lang
     if self.position.nil?
@@ -67,16 +64,69 @@ class Legacy::Accreditation < Legacy::BaseAccred
     end
   end
 
-  def class_delegate
-    se, pe = self.unit.sigle.split("-")
-    Legacy::Delegate.where(sciper: self.persid, section: se, periode: pe).first
+  def hierarchy
+    self.unit.present? ? self.unit.hierarchie : nil
   end
 
-  def preference
-    Legacy::AccredPref.where(sciper: self.persid, unit: self.unit_id)
+  def class_delegate
+    se, pe = self.unit.sigle.split("-")
+    d = self.person.delegate
+    if d.nil? or d.section != se or d.periode != pe
+      return nil
+    else
+      return d
+    end
   end
 end
 
+class Legacy::FullAccreditation < Legacy::Accreditation
+  attr_reader :address
+
+  def <=>(other)
+    self.order <=> other.order
+  end
+
+  def hidden?
+    @prefs.present? and @prefs.hidden?
+  end
+
+  def visible?
+    not hidden?
+  end
+
+  def phones=(o)
+    @phones = o.sort
+  end
+
+  def address=(a)
+    @address = a
+  end
+
+  def prefs=(p)
+    @prefs = p
+  end
+
+  def order
+    @prefs.present? ? @prefs.order : super
+  end
+
+  def phones
+    @phones
+  end
+
+  def visible_phones
+    @phones.select{|p| p.visible?}.sort #.map{|p| p.phone}
+  end
+
+  def phone
+    @phones.present? ? @phones.sort.first : nil
+  end
+
+  # def room
+  #   @phones.present? ? @phones.local : nil
+  # end
+
+end
 
 # sub getAllAccredsSolved {
 #   my ($self, $type, $val) = @_;

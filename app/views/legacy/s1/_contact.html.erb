@@ -5,9 +5,11 @@
   <% if @email %>
   <%= link_to @email.address, "mailto:#{@email.address}", class: "btn btn-sm btn-primary" %>
   <% end %>
-  <% if @person.phone %>
-  <%= phone_link(@person.phone.number, class: "btn btn-sm btn-secondary") %>
+
+  <% if @person.default_phone %>
+  <%= phone_link(@person.default_phone.number, class: "btn btn-sm btn-secondary") %>
   <% end %>
+
   <% if @editable && @cv.web_perso.present? %>
     <%= link_to(@cv.web_perso, @cv.web_perso, class: "btn btn-sm btn-secondary") %>
   <% end %>
@@ -24,7 +26,6 @@
 </p>
 <% end %>
 
-<% end %>
 
 <% if @cv.visible_social_ids.present? %>
 <div class="mt-1">
@@ -43,4 +44,6 @@
 <% end %>
   </p>
 </div>
+<% end %>
+
 <% end %>

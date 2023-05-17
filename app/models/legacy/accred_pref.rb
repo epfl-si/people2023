@@ -6,7 +6,15 @@ class Legacy::AccredPref < Legacy::BaseCv
     self.where(sciper: sciper).order(:ordre)
   end
 
-  def self.visible_by_sciper(sciper)
-    self.where(sciper: sciper, accred_show: 1).order(:ordre)
+  def order
+    self.ordre
+  end
+
+  def unit_id
+    self.unit
+  end
+
+  def hidden?
+    self.accred_show == 0
   end
 end
