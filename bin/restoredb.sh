@@ -62,6 +62,20 @@ restore() {
 	  ssh -C $DATASRC "mysqldump -h $h -u $u -p'$p' $db $tables" > aaa.sql 
 	fi
 	cat aaa.sql | exec_mysql $db
+
+	# add missing indexes
+	if [ "$db" == "cv" ] ; then
+		index="sciper"
+		for t in awards boxes edu parcours publications research_ids ; do 
+			ic=$(echo "SELECT COUNT(1) IndexIsThere FROM INFORMATION_SCHEMA.STATISTICS WHERE table_schema='cv' AND table_name='$t' AND index_name='$index';"  |exec_mysql $db | tail -n 1)
+			if [ "$ic" == "0" ] ; then
+				echo "Table $db.$t: index for sciper needs to be added"
+				echo "ALTER TABLE $t ADD INDEX ($index);" | exec_mysql $db
+			else
+				echo "Table $db.$t: index for sciper alreaty present"
+			fi
+		done
+	fi
 }
 
 # ------------------------------------------------------------------------------
