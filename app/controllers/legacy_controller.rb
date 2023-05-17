@@ -31,11 +31,9 @@ class LegacyController < ApplicationController
       @email = Legacy::Email.where("addrlog = ? OR addrlog LIKE ?", "#{sciper_or_name}@epfl.ch", "#{sciper_or_name}@epfl.%").first
       @sciper=@email.sciper unless @email.nil?
     end
-    Rails.logger.debug("LegacyController::set_sciper_and_email done")
   end
 
   def set_show_data
-    Rails.logger.debug("set_show_data")
     set_sciper_and_email unless @sciper
     @person = Legacy::Person.find(@sciper)
     @affiliations = @person.full_accreds
@@ -61,6 +59,5 @@ class LegacyController < ApplicationController
         @boxes['B'].first.label = "" if @boxes['B'].first.label == t("biography")
       end
     end
-    Rails.logger.debug("LegacyController::set_show_data done")
   end
 end

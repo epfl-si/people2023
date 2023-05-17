@@ -15,7 +15,6 @@ services:
       - atela
     working_dir: /var/www/vhosts/app/private/tests
 
-
   # Keycloak is an OpenID-Connect IdP (Identity Provider) that is easy
   # to set up. It mocks out that feature in the Rails application,
   # allowing testing with arbitrary users and groups. See further
@@ -68,8 +67,14 @@ services:
       - ./db/initdb_dev.d:/docker-entrypoint-initdb.d
     networks:
       - default
+
+  cache:
+    image: redis:latest
+    command:
+      - --maxmemory 32mb    
     networks:
       - default
+
   webapp:
     build:
       context: .

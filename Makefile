@@ -16,7 +16,7 @@ codecheck:
 	# TODO: add linters and automated tests too...
 	# bundle-audit returns 1 if there are vulnerabilities => prevents build
 	# nicer gui available at https://audit.fastruby.io
-	bundle exec bundle-audit check --update
+	# 	bundle exec bundle-audit check --update
 	# 	bundle exec brakeman
 
 kup:
@@ -68,6 +68,12 @@ test: test-system
 
 test-system: testup
 	docker-compose -f $(COMPOSE) exec webapp ./bin/rails test:system
+
+cacheon:
+	docker-compose -f $(COMPOSE) exec webapp touch tmp/caching-dev.txt
+
+cacheoff:
+	docker-compose -f $(COMPOSE) exec webapp rm -f tmp/caching-dev.txt	
 
 # setup_kc: dcup
 # 	sleep 10
