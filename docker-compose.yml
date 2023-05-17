@@ -65,8 +65,9 @@ services:
       MARIADB_ROOT_PASSWORD: mariadb
     volumes:
       - mariadb:/var/lib/mysql
-      - ./keycloak/initdb.d/keycloak-database-and-user.sql:/docker-entrypoint-initdb.d/keycloak-database-and-user.sql:ro
-      - ./db/dev_setup:/docker-entrypoint-initdb.d
+      - ./db/initdb_dev.d:/docker-entrypoint-initdb.d
+    networks:
+      - default
     networks:
       - default
   webapp:
