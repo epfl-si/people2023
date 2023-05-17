@@ -27,7 +27,7 @@ class Legacy::Person < Legacy::BaseDinfo
   has_many :units, :class_name => "Unit", :through => :accreds, :foreign_key => "persid", :source => "unit"
   has_many :positions, :class_name => "Position", :through => :accreds, :foreign_key => "persid", :source => "position"
   has_many :policies, :class_name => "Policy", :foreign_key => "persid"
-  has_many :active_policies, -> { where("#{Legacy::Policy.table_name}.finval IS NULL OR #{Legacy::Policy.table_name}.finval > ?", Date.today.strftime) }, :class_name => "Policy", :foreign_key => "persid"
+  has_many :active_policies, :class_name => "Policy", :foreign_key => "persid"
   has_many :active_properties, :class_name => "Property", :through => :active_policies, :foreign_key => "persid", :source => "property"
 
   # merge accred data with data from dinfo (office, address) and people (prefs)
@@ -147,9 +147,13 @@ class Legacy::Person < Legacy::BaseDinfo
   end
 
   def can_edit_profile?
-    self.accreds.any? {|a| a.can_edit_profile?} ||
-      self.active_properties.map{|p| p.id}.include?(7) ||
-        self.positions.map{|p| p.labelfr}.include?('Professeur honoraire')
+    # avoid doing twice the request for self.accreds if full_accreds already computed
+    (@full_accreds || self.accreds).any? {|a| a.can_edit_profile?} ||
+      self.active_properties.map{|p| p.name}.include?("gestprofil")
+  end
+
+  def is_student?
+    (@full_accreds || self.accreds).any? {|a| a.is_student?}
   end
 
   # $is_achieving_professor = $ENV{FORCE_ACHIEVING_PROF} || does_have_right_anywhere($self, $sciper, 'AAR.report.control');

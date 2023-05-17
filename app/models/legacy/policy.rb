@@ -5,4 +5,7 @@ class Legacy::Policy < Legacy::BaseAccred
   belongs_to :person, :class_name => "Person", :foreign_key => "persid"
   belongs_to :property, :class_name => "Property", :foreign_key => "propid"
 
+  default_scope {
+    where(finval: nil).includes(:property)
+  }
 end

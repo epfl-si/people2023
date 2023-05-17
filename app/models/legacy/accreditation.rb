@@ -32,6 +32,17 @@ class Legacy::Accreditation < Legacy::BaseAccred
     joins(:position, :status, :kind).includes(:unit).where(finval: nil)
   }
 
+  # TODO: these arrays could become obsolete if server never reloads
+  def self.can_edit_profile_with_given_accred?(a)
+    @can_edit_position_ids ||= Legacy::Position.where(labelfr: 'Professeur honoraire').map{|p| p.id}
+    @can_edit_status_ids ||= Legacy::Status.where(labelen: ['Staff', 'Student']).map{|s| s.id}
+    @can_edit_status_ids.include?(a.statusid) or @can_edit_position_ids.include?(a.posid)
+  end
+  def self.is_student_with_given_accred?(a)
+    @student_status_ids ||= Legacy::Status.where(labelen: ['Student', 'External student']).map{|s| s.id}
+    @student_status_ids.include?(a.statusid)
+  end
+
   def unit_id
     self.unitid
   end
@@ -45,13 +56,11 @@ class Legacy::Accreditation < Legacy::BaseAccred
   end
 
   def can_edit_profile?
-    # ["Staff", "Student"].include?(self.status.labelen)
-    [1, 5].include?(self.statusid)
+    Legacy::Accreditation.can_edit_profile_with_given_accred?(self)
   end
 
   def is_student?
-    # ["External student", "Student", "Alumni"].include?(self.status.labelen)
-    [4, 5, 6].include?(self.statusid)
+    Legacy::Accreditation.is_student_with_given_accred?(self)
   end
 
   def t_position(lang=I18n.locale)
