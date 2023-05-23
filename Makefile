@@ -108,3 +108,4 @@ restore_cv:
 
 restore_dinfo:
 	./bin/restoredb.sh dinfo
+

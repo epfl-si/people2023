@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-set -x
+# set -x
 . .env
 COMPOSE="${COMPOSE:-docker-compose.yml}"
 DATASRC="${DATASRC:-peo1}"
@@ -44,9 +44,9 @@ restore() {
 	accred)
 		tables="$ACCRED_TABLES"; ;;
 	cadi)
-		tables="$ACCRED_TABLES"; ;;
+		tables="$CADI_TABLES"; ;;
 	dinfo)
-		tables="$ACCRED_TABLES"; ;;
+		tables="$DINFO_TABLES"; ;;
 	bottin)
 		tables="$BOTTIN_TABLES"; ;;
 	*)
@@ -57,13 +57,14 @@ restore() {
 	u="$(db_secret $db 4)"
 	p="$(db_secret $db 5)"
 
+	dumpfile=${db}_dump.sql.gz
 
-	dump="mysqldump -h $h -u $u -p'$p' $db $tables | gzip"
-	ssh -C $DATASRC "mysqldump -h $h -u $u -p'$p' $db $tables" | fixdb | $mysql
-	if [ ! -f aaa.sql ] ; then
-	  ssh -C $DATASRC "mysqldump -h $h -u $u -p'$p' $db $tables" > aaa.sql 
+	# dump="mysqldump -h $h -u $u -p'$p' $db $tables | gzip"
+	# ssh -C $DATASRC "mysqldump -h $h -u $u -p'$p' $db $tables | gzip"
+	if [ ! -f $dumpfile ] ; then
+		ssh -C $DATASRC "mysqldump -h $h -u $u -p'$p' $db $tables | gzip" > $dumpfile
 	fi
-	cat aaa.sql | exec_mysql $db
+	gunzip -c  $dumpfile | fixdb | exec_mysql $db
 
 	# add missing indexes
 	if [ "$db" == "cv" ] ; then
@@ -85,7 +86,7 @@ restore() {
 db=$1
 
 if [ "$db" == "all" ] ; then
-	for db in accred cadi cv dinfo ; do
+	for db in accred bottin cadi cv dinfo ; do
 		restore $db
 	done
 else
