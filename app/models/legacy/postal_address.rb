@@ -20,8 +20,14 @@ class Legacy::PostalAddress < Legacy::BaseBottin
 		self.pers_id
 	end
 
+	# return all the lines in adr
 	def lines
-		@lines ||= self.adr.split(" $ ")
+		self.adr.nil? ? [] : self.adr.split(" $ ")
+	end
+
+	# return all the lines in addr except the first one (affiliation hierarchy)
+	def address_lines
+		self.adr.nil? ? [] : self.adr.split(" $ ")[1..]
 	end
 
   def full

@@ -9,7 +9,7 @@ module LegacyHelper
 
   # expect a type Legacy::PostalAddress as input
   def address(a)
-    a.lines[1..].join("<br>").html_safe
+    a.address_lines.join("<br>").html_safe
   end
 
   def hierarchy_links(y)
