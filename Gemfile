@@ -88,6 +88,8 @@ gem "devise", "~> 4.9"
 # gem 'activerecord-oracle_enhanced-adapter', '~> 7.0.0'
 gem 'mysql2'
 
+gem 'net-ldap'
+
 # # To enable CORS from keycloak
 # gem 'rack-cors'
 
