@@ -3,7 +3,7 @@ set -e
 # set -x
 . .env
 COMPOSE="${COMPOSE:-docker-compose.yml}"
-DATASRC="${DATASRC:-peo11}"
+DATASRC="${DATASRC:-dinfo@dinfo11}"
 
 DUMPDIR="${DUMPDIR:-tmp/dbdumps}"
 

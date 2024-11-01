@@ -2,7 +2,6 @@
 # is *not* meant for production.
 # https://www.keycloak.org/server/reverseproxy
 
-version: "3.9"
 name: people2023
 
 services:
