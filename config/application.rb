@@ -42,6 +42,7 @@ module People
     config.intranet_re = Regexp.new(ENV.fetch('INTRANET_RE', '^128\.17[89]'))
     config.hide_teacher_accreds = ENV.fetch('SKIP_ENS_ACCREDDS', true)
     config.app_hostname = ENV.fetch('APP_HOSTNAME', 'people.epfl.ch')
+    config.legacy_support = ENV.fetch('PEO_LEGACY_SUPPORT', true)
     routes.default_url_options[:host] = config.app_hostname
 
     vf = Rails.root.join("VERSION")

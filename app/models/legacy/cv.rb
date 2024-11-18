@@ -41,8 +41,20 @@ module Legacy
       datenaiss_show == '1'
     end
 
+    def show_email?
+      email_show == '1'
+    end
+
+    def show_nationality?
+      nat_show == '1'
+    end
+
     def show_photo?
       photo_show == '1'
+    end
+
+    def show_weburl?
+      web_perso_show == '1'
     end
 
     def any_publication?

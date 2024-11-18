@@ -73,7 +73,7 @@ class Person
   end
 
   def can_have_profile?
-    unless defined?(@can_edit_profile)
+    unless defined?(@can_have_profile)
       @can_have_profile = begin
         a = APIAuthGetter.new(sciper).fetch
         a.any? { |d| d['status'] == 'active' }
@@ -98,7 +98,7 @@ class Person
 
   # TODO: check if this is always the case as there might be issues with people
   #       changing name, with modified usual names etc.
-  def email_user
+  def email_user(email)
     email.gsub(/@.*$/, '')
   end
 

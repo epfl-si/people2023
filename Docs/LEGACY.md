@@ -1,4 +1,4 @@
-# Notes about the old people application
+# Notes about the old people application and migration
 People have to main main sources of data:
   1. official personal data (name, accreditations, etc.) from read-only DBs and APIs.
   2. people-specific biography / curriculum vitae data that can be edited by the user
@@ -151,3 +151,53 @@ Cons:
 
 
  
+
+
+## Migration
+
+Migrating garbage is not fun. Possible alternatives are
+ 1. keep as much as the garbage unchanged and hope for the best;
+ 2. hire workforce to manually copy the current profiles (at least for profs and VIP)
+ 3. _one shot carryover_ we start the new application for everybody but we keep serving the legacy data with a dedicated view untill the profile owner tries to edit his profile. At that point we fire a "first import" view where we prefill data with what we can and let the user do the rest. The problem is that the thing is easy if the user fixes all the records at once (stays on the edit page as long as all the records are fixed and saved) but otherwise we have to keep track of which records were imported.
+
+```mermaid
+flowchart TD
+    A(people/show) --> B1{profile exists ?}
+    B1 -->|no| B2{can have profile?}
+    B2 -->|yes| C[create new profile with fully migrated set to true if no legacy present]
+    C --> B3{is profile fully migrated ?}
+    B1 -->|yes| B3
+    B2 -->|no| D(render show)
+    B3 -->|yes| D
+    B3 -->|no| E(render legacy_show)
+    D -->|edit| F(profile/edit)
+    E -->|import| G("profile/import")
+```
+
+* first visit of any editable profile will create it by default. 
+* before create callback check if profile needs to be migrated (that is, legacy data exists);
+* "can have profile?" needs api but will be cached
+* if user logged-in and profile not migrated a message will be shown with the invitation to do the migration job and a link to profile/import
+* For records not containing rich text, we can create new objects copying from legacy and append them to the list of already migrated real objects. What about objects with rich text ?
+* implement `from_legacy` class method in all models and add reference to legacy id to enable deletion `after_create`.
+* remove button just acts on the dom
+
+Tables:
+
+| table        | auto  | rich text? | notes |
+|--------------|-------|------------|------------------------------------------------------------------|
+| accreds      | yes   | no         |  |
+| boxes        | no    | possibly   |  |
+| common       | yes   |            | merged into profile |
+| cv           | no    | yes        | just 3 rich text boxes (curriculum=bio, expertise, mission) |
+| edu          | no    | no         | but not too much crap (dates could be managed) |
+| parcours     | no    | no         | quite a garbage container (field column is actually description) |
+| profresearch |       |            | no longer used  |
+| publications | yes   | no         |  |
+| redirects    | yes   | no         |  |
+| research_ids | maybe | no         |  |
+| teaching_act | ??    |            | possibly no longer used. Check! |
+
+There are ~10k rich text boxes with content (see `lib/tasks/cvcleanup.rake`)
+
+

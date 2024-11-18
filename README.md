@@ -160,7 +160,6 @@ In my opinion (giova), the development overhead introduced by the so called web 
 
 Our tiny application people.epfl.ch serves at most few requests per second and is a read-only application for most of the data. The user editable part is quite limited and simple. Therefore, it does not match any of the above use cases. The amount of nice features provided natively by RoR that would have to be discarded for embracing the web 2.0 is not justified at all. 
 
-## Migration
 
 ### Profile pictures
 
@@ -172,6 +171,9 @@ The GUI for selecting the image must be composed of three parts:
  1. toggle if picture should be visible or not;
  2. toggle if camipro picture is to be used (currently camipro photo is used if common.photo_ext is not 1);
  3. list selector for the uploaded images (currently this is decided by common.photo_ts)
+
+We will import only the currently active  profile picture by looking at the `links` directory on the production serve.
+
 
 ### Useful links
  * EPFL api doc for [person](https://api-test.epfl.ch/docs/persons-api/index.html), [accred](https://api-test.epfl.ch/docs/accred-api/index.html)

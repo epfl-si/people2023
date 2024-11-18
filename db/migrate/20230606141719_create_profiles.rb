@@ -27,6 +27,8 @@ class CreateProfiles < ActiveRecord::Migration[7.0]
       # t.string :title_en
       # t.string :title_fr
 
+      t.boolean :migrated, default: false
+
       t.timestamps
     end
   end

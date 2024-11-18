@@ -112,18 +112,14 @@ class Accreditation
     @botweb
   end
 
-  def visible?
-    # There are actually 3 level of visibility check fir accreditations.
+  def visible?(hide_teacher_accreds: Rails.configuration.hide_teacher_accreds)
+    # There are actually 3 level of visibility check for accreditations.
     # 1. must have the 'botweb' property (self.for_sciper)
-    # 2. (done here) purely teaching position can be hidden
+    # 2. (done here) purely teaching position can be hidden (hide_teacher_accreds switch)
     # 3. (done in prefs) user can decide to hide certains accreds
-    unless defined?(@visible)
-      @visible =
-        botweb? &&
-        (prefs.present? ? prefs.visible? : true) &&
-        !(Rails.configuration.hide_teacher_accreds && @position.enseignant?)
-    end
-    @visible
+    botweb? &&
+      (prefs.present? ? prefs.visible? : true) &&
+      !(hide_teacher_accreds && @position.enseignant?)
   end
 
   def hidden_addr?

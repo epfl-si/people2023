@@ -53,20 +53,43 @@ class Profile < ApplicationRecord
     show_phone: true,
     show_photo: false,
     show_title: false,
+    show_weburl: false,
+    show_email: true,
     force_lang: nil,
     personal_web_url: nil,
     nationality_en: nil,
     nationality_fr: nil,
     title_en: nil,
-    title_fr: nil
+    title_fr: nil,
+    migrated: false,
   }.freeze
 
   def self.new_with_defaults(sciper)
-    new(DEFAULTS.merge(sciper: sciper))
+    r = new(DEFAULTS.merge(sciper: sciper))
+    return unless Rails.configuration.legacy_support
+
+    clegacy = Legacy::Cv.find(sciper)
+    ten_legacy = clegacy.translated_part('en')
+    tfr_legacy = clegacy.translated_part('fr')
+    r.show_birthday = clegacy.show_birthday?
+    r.show_email = clegacy.show_email?
+    r.show_nationality = clegacy.show_nationality?
+    r.show_photo = clegacy.show_photo?
+    r.personal_web_url = clegacy.web_perso
+    r.show_weburl = clegacy.show_weburl?
+    r.force_lang = clegacy.defaultcv if clegacy.defaultcv.present?
+    # TODO: delegate edu_show, pub_show, tromb_show, parcours_show to corresponding boxes
+
+    # TODO: eventually get rid of the title field (asked to Natalie for confirmation)
+    r.title_en = ten_legacy.title if ten_legacy.title.present?
+    r.title_fr = tfr_legacy.title if tfr_legacy.title.present?
+    r.show_title = (ten_legacy.visible_title? || tfr_legacy.visible_title?)
+    # TODO: delegate curriculum, expertise, mission to corresponding boxes
+    r
   end
 
   def self.create_with_defaults(sciper)
-    create(DEFAULTS.merge(sciper: sciper))
+    new_with_defaults(sciper).save
   end
 
   def self.for_sciper(sciper)

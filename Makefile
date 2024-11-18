@@ -304,10 +304,20 @@ restore_cadi:
 
 restore_cv:
 	./bin/restoredb.sh cv
+	make cvcleanup
 
 restore_dinfo:
 	./bin/restoredb.sh dinfo
 
+tmp/active_scipers.txt: tmp/active_accreds.json
+	cat $< | jq '.accreds.[].persid' | sort -u > $@
+
+tmp/active_accreds.json:
+	./bin/api.sh accreds > $@
+
+cvcleanup: tmp/active_scipers.txt
+	docker compose exec webapp ./bin/rails data:cvcleanup
+	docker compose exec webapp ./bin/rails data:cvstats
 
 # ------------------------------------------------------------------------------
 .PHONY: clean
